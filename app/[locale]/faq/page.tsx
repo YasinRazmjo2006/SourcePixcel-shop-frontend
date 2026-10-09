@@ -1,0 +1,97 @@
+import type { Locale } from "@/lib/types";
+import { StaticPage } from "@/components/common";
+
+interface PageProps {
+  params: Promise<{ locale: string }>;
+}
+
+const FAQ_ITEMS = [
+  {
+    fa: {
+      q: "چطور می‌توانم سفارش خود را پیگیری کنم؟",
+      a: "پس از ثبت سفارش، کد پیگیری از طریق پیامک برای شما ارسال می‌شود. می‌توانید از بخش «سفارشات من» در پنل کاربری نیز وضعیت سفارش را مشاهده کنید.",
+    },
+    en: {
+      q: "How can I track my order?",
+      a: "After placing an order, a tracking code is sent to you via SMS. You can also check your order status in the 'My Orders' section of your account.",
+    },
+  },
+  {
+    fa: {
+      q: "شرایط بازگشت کالا چیست؟",
+      a: "شما تا ۷ روز پس از دریافت کالا، در صورت عدم رضایت یا وجود مشکل، می‌توانید درخواست بازگشت ثبت کنید. کالا باید در بسته‌بندی اصلی و بدون آسیب باشد.",
+    },
+    en: {
+      q: "What is the return policy?",
+      a: "You can request a return within 7 days of receiving the product if you're not satisfied or if there's an issue. The product must be in its original packaging without damage.",
+    },
+  },
+  {
+    fa: {
+      q: "هزینه ارسال چگونه محاسبه می‌شود؟",
+      a: "هزینه ارسال بر اساس روش انتخابی و مقصد محاسبه می‌شود. برای سفارشات بالای ۵ میلیون تومان، ارسال رایگان است.",
+    },
+    en: {
+      q: "How is the shipping cost calculated?",
+      a: "Shipping cost depends on your selected method and destination. Orders above 5 million Toman qualify for free shipping.",
+    },
+  },
+  {
+    fa: {
+      q: "آیا امکان پرداخت در محل وجود دارد؟",
+      a: "در حال حاضر فقط پرداخت آنلاین از طریق درگاه‌های معتبر (زرین‌پال) پذیرفته می‌شود.",
+    },
+    en: {
+      q: "Is cash on delivery available?",
+      a: "Currently, only online payment through trusted gateways (Zarinpal) is accepted.",
+    },
+  },
+  {
+    fa: {
+      q: "چگونه می‌توانم رمز عبور خود را بازیابی کنم؟",
+      a: "از صفحه ورود، روی «رمز عبور را فراموش کرده‌اید؟» کلیک کنید و شماره موبایل خود را وارد کنید. کد بازیابی برای شما ارسال می‌شود.",
+    },
+    en: {
+      q: "How can I recover my password?",
+      a: "From the login page, click 'Forgot password?' and enter your mobile number. A reset code will be sent to you.",
+    },
+  },
+];
+
+export default async function FAQPage({ params }: PageProps) {
+  const { locale } = await params;
+  const typedLocale = locale as Locale;
+  const isFa = typedLocale === "fa";
+
+  return (
+    <StaticPage
+      locale={typedLocale}
+      titleFa="سوالات متداول"
+      titleEn="Frequently Asked Questions"
+      breadcrumbFa="سوالات متداول"
+      breadcrumbEn="FAQ"
+    >
+      <div className="not-prose space-y-3">
+        {FAQ_ITEMS.map((item, i) => {
+          const data = isFa ? item.fa : item.en;
+          return (
+            <details
+              key={i}
+              className="group border border-[#E0E0E2] rounded-lg overflow-hidden"
+            >
+              <summary className="cursor-pointer p-4 text-[13px] font-bold text-[#3F4064] hover:bg-[#F5F5F5] flex items-center justify-between">
+                <span>{data.q}</span>
+                <span className="text-[#EF4056] text-[16px] group-open:rotate-45 transition-transform">
+                  +
+                </span>
+              </summary>
+              <div className="px-4 pb-4 text-[12px] text-[#62666D] leading-6 border-t border-[#F5F5F5] pt-3">
+                {data.a}
+              </div>
+            </details>
+          );
+        })}
+      </div>
+    </StaticPage>
+  );
+}
