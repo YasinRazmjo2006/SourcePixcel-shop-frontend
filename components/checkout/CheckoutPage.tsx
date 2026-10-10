@@ -5,6 +5,7 @@ import type { Locale, Product } from "@/lib/types";
 import { products as allProducts } from "@/lib/data";
 import { useCartStore } from "@/lib/stores";
 import { Breadcrumb, EmptyState } from "@/components/common";
+import { PaymentMethods, TrustBadges } from "@/components/trust";
 import StepIndicator from "./StepIndicator";
 import ShippingForm, { type ShippingData } from "./ShippingForm";
 import ShippingMethod from "./ShippingMethod";
@@ -115,7 +116,6 @@ export default function CheckoutPage({ locale }: CheckoutPageProps) {
     );
   }
 
-  // Payment callback result
   if (paymentResult) {
     return (
       <PaymentCallback
@@ -126,7 +126,6 @@ export default function CheckoutPage({ locale }: CheckoutPageProps) {
     );
   }
 
-  // Gateway
   if (showGateway) {
     return (
       <ZarinpalGateway
@@ -139,7 +138,6 @@ export default function CheckoutPage({ locale }: CheckoutPageProps) {
     );
   }
 
-  // Empty cart
   if (lines.length === 0) {
     return (
       <div className="max-w-[1400px] mx-auto px-4 py-4">
@@ -149,10 +147,14 @@ export default function CheckoutPage({ locale }: CheckoutPageProps) {
         />
         <EmptyState
           locale={locale}
+          type="cart"
           titleFa="سبد خرید خالی است"
           titleEn="Your cart is empty"
           messageFa="برای تسویه حساب ابتدا محصولی به سبد خرید اضافه کنید."
           messageEn="Add a product to your cart before checking out."
+          actionLabelFa="شروع خرید"
+          actionLabelEn="Start shopping"
+          actionHref={`/${locale}`}
         />
       </div>
     );
@@ -201,14 +203,13 @@ export default function CheckoutPage({ locale }: CheckoutPageProps) {
                 {isFa ? "پرداخت" : "Payment"}
               </h2>
 
-              {/* Payment summary */}
               <div className="bg-[#FAFAFA] dark:bg-[#0F0F12] rounded-xl p-4 mb-4 border border-[#E0E0E2] dark:border-[#2A2A2E]">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-[12px] text-[#62666D] dark:text-[#A1A3A8]">
                     {isFa ? "مبلغ قابل پرداخت" : "Amount to Pay"}
                   </span>
                   <span className="text-[18px] font-bold text-[#EF4056]">
-                    {formatPrice(totals.total, locale)}{" "}
+                    {totals.total.toLocaleString(isFa ? "fa-IR" : "en-US")}{" "}
                     <span className="text-[11px] text-[#62666D] font-normal">
                       {isFa ? "تومان" : "T"}
                     </span>
@@ -221,7 +222,6 @@ export default function CheckoutPage({ locale }: CheckoutPageProps) {
                 </div>
               </div>
 
-              {/* Gateway info */}
               <div className="border-2 border-dashed border-[#E0E0E2] dark:border-[#2A2A2E] rounded-xl p-5 bg-[#F9A825]/5 mb-5">
                 <div className="flex items-center justify-center gap-3">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F9A825] to-[#FFB300] flex items-center justify-center text-white text-[22px] font-bold">
@@ -238,7 +238,6 @@ export default function CheckoutPage({ locale }: CheckoutPageProps) {
                 </div>
               </div>
 
-              {/* Actions */}
               <div className="flex gap-3">
                 <button
                   onClick={() => setStep(2)}
@@ -255,10 +254,12 @@ export default function CheckoutPage({ locale }: CheckoutPageProps) {
               </div>
             </div>
           )}
+
+          {/* Payment methods + Trust badges in checkout */}
+          <PaymentMethods locale={locale} />
         </div>
 
-        {/* Review sidebar */}
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-1 space-y-4">
           {step >= 2 && shipping.fullName ? (
             <OrderReview
               locale={locale}
@@ -277,6 +278,8 @@ export default function CheckoutPage({ locale }: CheckoutPageProps) {
                 : "Order details will appear after completing the form."}
             </div>
           )}
+
+          <TrustBadges locale={locale} variant="compact" />
         </div>
       </div>
     </div>

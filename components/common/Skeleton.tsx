@@ -11,7 +11,8 @@ export default function Skeleton({
   width,
   height,
 }: SkeletonProps) {
-  const base = "bg-[#E0E0E2] dark:bg-[#2A2A2E] animate-pulse";
+  const base =
+    "bg-[#E0E0E2] dark:bg-[#2A2A2E] relative overflow-hidden skeleton-shimmer";
   const shape =
     variant === "circle"
       ? "rounded-full"

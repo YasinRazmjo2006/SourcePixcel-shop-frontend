@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
+import { motion } from "framer-motion";
+import { RefreshCw, Home, AlertTriangle } from "lucide-react";
 import Link from "next/link";
-import { AlertTriangle, RefreshCw, Home } from "lucide-react";
+import { RippleButton } from "@/components/ui";
 
 export default function Error({
   error,
@@ -17,31 +19,65 @@ export default function Error({
 
   return (
     <div className="max-w-[1400px] mx-auto px-4 py-16 text-center">
-      <div className="w-20 h-20 rounded-full bg-[#EF4444]/10 flex items-center justify-center mx-auto mb-4">
-        <AlertTriangle size={40} className="text-[#EF4444]" />
-      </div>
-      <h1 className="text-[22px] font-bold text-[#3F4064] dark:text-[#E5E5EA] mb-2">
-        خطایی رخ داد
-      </h1>
-      <p className="text-[13px] text-[#62666D] dark:text-[#A1A3A8] mb-6 max-w-md mx-auto">
-        متأسفانه در بارگذاری این صفحه مشکلی پیش آمد. لطفاً دوباره تلاش کنید.
-      </p>
-      <div className="flex items-center justify-center gap-3 flex-wrap">
-        <button
-          onClick={reset}
-          className="h-10 px-5 rounded-lg bg-[#EF4056] text-white text-[13px] font-medium hover:bg-[#d63850] flex items-center gap-2"
+      <div className="relative mb-6 inline-block">
+        <motion.div
+          animate={{ scale: [1, 1.15, 1], opacity: [0.15, 0.05, 0.15] }}
+          transition={{ duration: 3, repeat: Infinity }}
+          className="absolute inset-0 rounded-full bg-[#EF4444]"
+          style={{ width: 120, height: 120 }}
+        />
+        <motion.div
+          initial={{ scale: 0, rotate: -10 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          className="relative w-[120px] h-[120px] rounded-full bg-[#EF4444]/10 flex items-center justify-center"
         >
+          <motion.div
+            animate={{ rotate: [0, -5, 5, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            <AlertTriangle size={52} className="text-[#EF4444]" />
+          </motion.div>
+        </motion.div>
+      </div>
+
+      <motion.h1
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
+        className="text-[22px] font-bold text-[#3F4064] dark:text-[#E5E5EA] mb-2"
+      >
+        خطایی رخ داد
+      </motion.h1>
+
+      <motion.p
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="text-[13px] text-[#62666D] dark:text-[#A1A3A8] mb-6 max-w-md mx-auto leading-6"
+      >
+        متأسفانه در بارگذاری این صفحه مشکلی پیش آمد. لطفاً دوباره تلاش کنید یا به
+        صفحه اصلی بازگردید.
+      </motion.p>
+
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.25 }}
+        className="flex items-center justify-center gap-3 flex-wrap"
+      >
+        <RippleButton onClick={reset} variant="primary" size="md">
           <RefreshCw size={16} />
           تلاش مجدد
-        </button>
-        <Link
-          href="/fa"
-          className="h-10 px-5 rounded-lg border border-[#E0E0E2] text-[13px] text-[#3F4064] dark:text-[#E5E5EA] hover:border-[#EF4056] hover:text-[#EF4056] flex items-center gap-2"
-        >
-          <Home size={16} />
-          بازگشت به خانه
+        </RippleButton>
+
+        <Link href="/fa">
+          <RippleButton variant="ghost" size="md">
+            <Home size={16} />
+            بازگشت به خانه
+          </RippleButton>
         </Link>
-      </div>
+      </motion.div>
     </div>
   );
 }

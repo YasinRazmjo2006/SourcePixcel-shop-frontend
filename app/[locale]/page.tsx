@@ -12,11 +12,19 @@ import {
   AmazingOffer,
   ProductSection,
   BrandLogos,
-  Testimonials,
   BlogPreview,
   Newsletter,
 } from "@/components/home";
+import {
+  StatsCounter,
+  TrustBadges,
+  Guarantees,
+  PaymentMethods,
+  Testimonials,
+} from "@/components/trust";
 import JsonLd from "@/components/common/JsonLd";
+import LazySection from "@/components/common/LazySection";
+import { Container } from "@/components/ui";
 import {
   buildMetadata,
   buildOrganizationSchema,
@@ -56,20 +64,13 @@ export default async function HomePage({ params }: PageProps) {
   return (
     <>
       <JsonLd data={[buildOrganizationSchema(), buildWebSiteSchema()]} />
-      <div className="max-w-[1400px] mx-auto px-4 py-4 space-y-4">
-        {/* 1. Hero Slider */}
+      <Container className="py-4 space-y-4 md:space-y-5">
+        {/* Above the fold — always render */}
         <HeroSlider locale={typedLocale} />
-
-        {/* 2. Service Badges */}
         <ServiceBadges locale={typedLocale} />
-
-        {/* 3. Categories */}
         <CategoryCircles locale={typedLocale} />
-
-        {/* 4. Amazing Offer */}
         <AmazingOffer locale={typedLocale} />
 
-        {/* 5. Featured */}
         {featured.length > 0 && (
           <ProductSection
             titleFa="پیشنهاد ویژه"
@@ -80,7 +81,6 @@ export default async function HomePage({ params }: PageProps) {
           />
         )}
 
-        {/* 6. New Arrivals */}
         {newProducts.length > 0 && (
           <ProductSection
             titleFa="جدیدترین‌ها"
@@ -91,29 +91,51 @@ export default async function HomePage({ params }: PageProps) {
           />
         )}
 
-        {/* 7. Brands */}
-        <BrandLogos locale={typedLocale} />
+        {/* Below the fold — lazy load */}
+        <LazySection minHeight={300}>
+          <BrandLogos locale={typedLocale} />
+        </LazySection>
 
-        {/* 8. Discounted */}
         {discounted.length > 0 && (
-          <ProductSection
-            titleFa="تخفیف‌دارها"
-            titleEn="Discounted"
-            products={discounted}
-            locale={typedLocale}
-            seeAllHref="/search?discount=1"
-          />
+          <LazySection minHeight={400}>
+            <ProductSection
+              titleFa="تخفیف‌دارها"
+              titleEn="Discounted"
+              products={discounted}
+              locale={typedLocale}
+              seeAllHref="/search?discount=1"
+            />
+          </LazySection>
         )}
 
-        {/* 9. Testimonials */}
-        <Testimonials locale={typedLocale} />
+        <LazySection minHeight={250}>
+          <Guarantees locale={typedLocale} />
+        </LazySection>
 
-        {/* 10. Blog */}
-        <BlogPreview locale={typedLocale} />
+        <LazySection minHeight={150}>
+          <StatsCounter locale={typedLocale} />
+        </LazySection>
 
-        {/* 11. Newsletter */}
-        <Newsletter locale={typedLocale} />
-      </div>
+        <LazySection minHeight={250}>
+          <TrustBadges locale={typedLocale} />
+        </LazySection>
+
+        <LazySection minHeight={150}>
+          <PaymentMethods locale={typedLocale} />
+        </LazySection>
+
+        <LazySection minHeight={350}>
+          <Testimonials locale={typedLocale} />
+        </LazySection>
+
+        <LazySection minHeight={350}>
+          <BlogPreview locale={typedLocale} />
+        </LazySection>
+
+        <LazySection minHeight={200}>
+          <Newsletter locale={typedLocale} />
+        </LazySection>
+      </Container>
     </>
   );
 }

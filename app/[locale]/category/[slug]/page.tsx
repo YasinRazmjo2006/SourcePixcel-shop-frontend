@@ -5,7 +5,7 @@ import { categories, brands, products } from "@/lib/data";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import JsonLd from "@/components/common/JsonLd";
 import { CategoryPage } from "@/components/category";
-import { buildMetadata, buildBreadcrumbSchema, SITE_URL_EXPORT } from "@/lib/utils";
+import { buildFullMetadata, breadcrumbSchema, SEO } from "@/lib/seo";
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>;
@@ -26,12 +26,16 @@ export async function generateMetadata({
   const category = categories.find((c) => c.slug === slug);
   if (!category) return { title: "Category not found" };
 
-  return buildMetadata({
+  const subcats = category.subcategories.map((s) => s.nameEn).join(", ");
+
+  return buildFullMetadata({
     locale: typedLocale,
-    titleFa: `${category.nameFa} | SourcePixcel`,
-    titleEn: `${category.nameEn} | SourcePixcel`,
-    descriptionFa: `خرید آنلاین ${category.nameFa} با بهترین قیمت و ارسال سریع از SourcePixcel.`,
-    descriptionEn: `Buy ${category.nameEn} online with the best price and fast shipping from SourcePixcel.`,
+    titleFa: `خرید ${category.nameFa} | بهترین قیمت`,
+    titleEn: `Buy ${category.nameEn} | Best Price`,
+    descriptionFa: `خرید آنلاین ${category.nameFa} با بهترین قیمت و ارسال سریع. انواع ${category.subcategories
+      .map((s) => s.nameFa)
+      .join("، ")} با ضمانت اصالت از SourcePixcel.`,
+    descriptionEn: `Buy ${category.nameEn} online with the best price and fast shipping. All ${subcats} with authenticity guarantee from SourcePixcel.`,
     path: `/category/${slug}`,
   });
 }
@@ -45,21 +49,21 @@ export default async function CategoryListingPage({ params }: PageProps) {
 
   const isFa = typedLocale === "fa";
 
-  const breadcrumbSchema = buildBreadcrumbSchema([
-    { name: isFa ? "خانه" : "Home", url: `${SITE_URL_EXPORT}/${typedLocale}` },
+  const bSchema = breadcrumbSchema([
+    { name: isFa ? "خانه" : "Home", url: `${SEO.SITE_URL}/${typedLocale}` },
     {
       name: isFa ? "دسته‌بندی‌ها" : "Categories",
-      url: `${SITE_URL_EXPORT}/${typedLocale}/categories`,
+      url: `${SEO.SITE_URL}/${typedLocale}/categories`,
     },
     {
       name: isFa ? category.nameFa : category.nameEn,
-      url: `${SITE_URL_EXPORT}/${typedLocale}/category/${slug}`,
+      url: `${SEO.SITE_URL}/${typedLocale}/category/${slug}`,
     },
   ]);
 
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={bSchema} />
       <div className="max-w-[1400px] mx-auto px-4">
         <Breadcrumb
           locale={typedLocale}
@@ -76,7 +80,7 @@ export default async function CategoryListingPage({ params }: PageProps) {
           ]}
         />
 
-        <h1 className="text-[20px] font-bold text-[#3F4064] dark:text-[#E5E5EA] mb-4">
+        <h1 className="text-[20px] md:text-[24px] font-bold text-[#3F4064] dark:text-[#E5E5EA] mb-4">
           {isFa ? category.nameFa : category.nameEn}
         </h1>
 

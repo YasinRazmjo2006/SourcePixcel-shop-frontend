@@ -2,6 +2,128 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ═══════════════════════════════════════════════════════════════
+   ACCESSIBILITY
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Focus visible — visible outline for keyboard users */
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 3px solid #EF4056;
+  outline-offset: 2px;
+  border-radius: 4px;
+  transition: outline-offset 0.15s ease;
+}
+
+/* Better focus ring for dark backgrounds */
+.dark *:focus-visible {
+  outline-color: #FF6B7D;
+}
+
+/* Focus ring for buttons */
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible {
+  outline: 3px solid #EF4056;
+  outline-offset: 2px;
+}
+
+/* Focus ring for inputs */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid #EF4056;
+  outline-offset: 0;
+  border-color: #EF4056;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: more) {
+  :root {
+    --border: #000000;
+  }
+
+  body {
+    color: #000000;
+  }
+
+  a,
+  button {
+    text-decoration: underline;
+  }
+}
+
+/* Dark mode contrast improvements */
+@media (prefers-contrast: more) and (prefers-color-scheme: dark) {
+  body {
+    color: #FFFFFF;
+  }
+
+  a,
+  button {
+    text-decoration: underline;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ROOT VARIABLES
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --spacing-unit: 0.25rem;
+  --text-2xs: 0.625rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.875rem;
+  --text-md: 0.9375rem;
+  --text-lg: 1.0625rem;
+  --text-xl: 1.1875rem;
+  --text-2xl: 1.375rem;
+  --text-3xl: 1.625rem;
+  --text-4xl: 2rem;
+  --leading-tight: 1.3;
+  --leading-snug: 1.45;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.75;
+  --leading-persian: 1.9;
+  --leading-loose: 2;
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.02em;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════════════════ */
+
 * {
   box-sizing: border-box;
 }
@@ -10,10 +132,29 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
   background: #F5F5F5;
   color: #3F4064;
+  font-family: var(--font-inter), var(--font-vazirmatn), system-ui, sans-serif;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "tnum";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+[dir="rtl"],
+[dir="rtl"] body {
+  font-family: var(--font-vazirmatn), system-ui, Tahoma, Arial, sans-serif;
+  line-height: var(--leading-persian);
+  letter-spacing: 0;
+  word-spacing: 0.05em;
+}
+
+[dir="ltr"],
+[dir="ltr"] body {
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-tight);
 }
 
 html.dark,
@@ -22,50 +163,200 @@ html.dark body {
   color: #E5E5EA;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   HEADINGS
+   ═══════════════════════════════════════════════════════════════ */
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: 700;
+  color: #3F4064;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+h1 { font-weight: 900; letter-spacing: -0.03em; }
+h2 { font-weight: 800; letter-spacing: -0.02em; }
+h3 { font-weight: 700; }
+h4 { font-weight: 700; }
+
+html.dark h1, html.dark h2, html.dark h3,
+html.dark h4, html.dark h5, html.dark h6 {
+  color: #E5E5EA;
+}
+
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3 {
+  letter-spacing: 0;
+  font-weight: 800;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LINKS & BUTTONS
+   ═══════════════════════════════════════════════════════════════ */
+
 a {
   color: inherit;
   text-decoration: none;
+  transition: color 0.15s ease;
 }
 
 button {
   font-family: inherit;
   cursor: pointer;
+  transition: all 0.15s ease;
 }
 
-[dir="rtl"] {
-  text-align: right;
+button:disabled {
+  cursor: not-allowed;
 }
 
-[dir="ltr"] {
-  text-align: left;
+/* ═══════════════════════════════════════════════════════════════
+   TEXT UTILITIES
+   ═══════════════════════════════════════════════════════════════ */
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
 }
 
-/* Scrollbar */
+[dir="rtl"] .tabular-nums {
+  font-feature-settings: "tnum", "ss01";
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.text-pretty {
+  text-wrap: pretty;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════════════════════════ */
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: #F5F5F5;
 }
+
 html.dark ::-webkit-scrollbar-track {
   background: #1A1A1E;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #E0E0E2;
   border-radius: 4px;
 }
+
 html.dark ::-webkit-scrollbar-thumb {
   background: #3A3A40;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #A1A3A8;
 }
-html.dark ::-webkit-scrollbar-thumb:hover {
-  background: #52525A;
+
+/* ═══════════════════════════════════════════════════════════════
+   SELECTION
+   ═══════════════════════════════════════════════════════════════ */
+
+::selection {
+  background: #EF4056;
+  color: white;
 }
 
-/* ─── Print styles ─────────────────────────────────────────── */
+::-moz-selection {
+  background: #EF4056;
+  color: white;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LINE CLAMP
+   ═══════════════════════════════════════════════════════════════ */
+
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════════════════════════ */
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+.animate-fade-in { animation: fade-in 0.2s ease-out; }
+.animate-slide-up { animation: slide-up 0.3s ease-out; }
+.animate-scale-in { animation: scale-in 0.2s ease-out; }
+
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  animation: shimmer 1.5s infinite;
+}
+
+html.dark .skeleton-shimmer::after {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PRINT
+   ═══════════════════════════════════════════════════════════════ */
+
 @media print {
   @page {
     margin: 1cm;
@@ -77,7 +368,6 @@ html.dark ::-webkit-scrollbar-thumb:hover {
     color: black !important;
   }
 
-  /* Hide everything except the invoice */
   body * {
     visibility: hidden;
   }
@@ -95,38 +385,19 @@ html.dark ::-webkit-scrollbar-thumb:hover {
     background: white !important;
     border: none !important;
     padding: 20px !important;
+    color: black !important;
   }
 
-  /* Hide all UI elements inside print content */
   .no-print {
     display: none !important;
   }
 
-  /* Force light colors */
-  .print-content {
+  .print-content h1, .print-content h2, .print-content h3,
+  .print-content h4, .print-content p, .print-content td,
+  .print-content th, .print-content span, .print-content div {
     color: black !important;
   }
 
-  .print-content h1,
-  .print-content h2,
-  .print-content h3,
-  .print-content h4,
-  .print-content p,
-  .print-content td,
-  .print-content th,
-  .print-content span,
-  .print-content div {
-    color: black !important;
-  }
-
-  /* Keep red for headers */
-  .print-content .text-\[\#EF4056\],
-  .print-content [style*="color: rgb(239, 64, 86)"],
-  .print-content [style*="#EF4056"] {
-    color: #EF4056 !important;
-  }
-
-  /* Table styling */
   .print-content table {
     border-collapse: collapse;
     width: 100%;
@@ -144,60 +415,7 @@ html.dark ::-webkit-scrollbar-thumb:hover {
     print-color-adjust: exact;
   }
 
-  /* Keep gradient */
-  .print-content .bg-gradient-to-r {
-    background: #EF4056 !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-
-  /* Prevent page breaks inside cards */
   .print-content > div {
     page-break-inside: avoid;
-  }
-}
-
-/* ─── Animations ──────────────────────────────────────────── */
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slide-in-from-top-2 {
-  from {
-    transform: translateY(-8px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.animate-in {
-  animation: fade-in 0.2s ease-out;
-}
-
-.fade-in {
-  animation: fade-in 0.2s ease-out;
-}
-
-.slide-in-from-top-2 {
-  animation: slide-in-from-top-2 0.3s ease-out;
-}
-
-/* Reduce motion preference */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
   }
 }

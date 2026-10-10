@@ -1,10 +1,12 @@
 "use client";
 
+import { memo } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import { motion } from "framer-motion";
 import { Heart, ShoppingCart } from "lucide-react";
 import type { Locale, Product } from "@/lib/types";
 import { useCartStore, useWishlistStore, useToastStore } from "@/lib/stores";
+import { SmartImage } from "@/components/common";
 import RatingStars from "./RatingStars";
 import PriceTag from "./PriceTag";
 import CompareButton from "./CompareButton";
@@ -16,7 +18,7 @@ interface ProductCardProps {
   priority?: boolean;
 }
 
-export default function ProductCard({
+function ProductCardComponent({
   product,
   locale,
   variant = "default",
@@ -58,7 +60,13 @@ export default function ProductCard({
   };
 
   return (
-    <div className="group relative bg-white dark:bg-[#1A1A1E] rounded-lg border border-[#E0E0E2] dark:border-[#2A2A2E] hover:shadow-lg transition-all duration-200 overflow-hidden">
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+      whileHover={{ y: -4 }}
+      className="group relative bg-white dark:bg-[#1A1A1E] rounded-lg border border-[#E0E0E2] dark:border-[#2A2A2E] hover:shadow-lg transition-shadow duration-300 overflow-hidden"
+    >
       <div
         className={`absolute top-2 z-20 flex flex-col gap-1.5 ${
           isFa ? "left-2" : "right-2"
@@ -67,7 +75,7 @@ export default function ProductCard({
         <button
           onClick={handleToggleWishlist}
           aria-label={isFa ? "افزودن به علاقه‌مندی" : "Add to wishlist"}
-          className={`w-7 h-7 rounded-full bg-white/90 backdrop-blur flex items-center justify-center transition-all ${
+          className={`w-7 h-7 rounded-full bg-white/90 dark:bg-[#1A1A1E]/90 backdrop-blur flex items-center justify-center transition-all ${
             isInWishlist ? "opacity-100" : "opacity-0 group-hover:opacity-100"
           }`}
         >
@@ -105,14 +113,21 @@ export default function ProductCard({
 
       <Link href={`/${locale}/product/${product.slug}`} className="block">
         <div className="aspect-square bg-[#F5F5F5] dark:bg-[#2A2A2E] relative overflow-hidden">
-          <Image
-            src={product.image}
-            alt={title}
-            fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-            priority={priority}
-          />
+          <motion.div
+            className="absolute inset-0"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <SmartImage
+              src={product.image}
+              alt={title}
+              fill
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+              className="object-cover"
+              priority={priority}
+              category={product.category}
+            />
+          </motion.div>
         </div>
 
         <div className={`p-3 ${variant === "compact" ? "pb-2" : ""}`}>
@@ -141,11 +156,13 @@ export default function ProductCard({
       </Link>
 
       {variant === "default" && (
-        <button
+        <motion.button
           onClick={handleAddToCart}
           disabled={!product.inStock}
           aria-label={isFa ? "افزودن به سبد خرید" : "Add to cart"}
-          className={`absolute bottom-3 w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          className={`absolute bottom-3 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
             isFa ? "left-3" : "right-3"
           } ${
             product.inStock
@@ -154,8 +171,21 @@ export default function ProductCard({
           }`}
         >
           <ShoppingCart size={15} />
-        </button>
+        </motion.button>
       )}
-    </div>
+    </motion.div>
   );
 }
+
+// Memoize to prevent unnecessary re-renders
+const ProductCard = memo(ProductCardComponent, (prevProps, nextProps) => {
+  return (
+    prevProps.product.id === nextProps.product.id &&
+    prevProps.product.inStock === nextProps.product.inStock &&
+    prevProps.product.finalPrice === nextProps.product.finalPrice &&
+    prevProps.locale === nextProps.locale &&
+    prevProps.variant === nextProps.variant
+  );
+});
+
+export default ProductCard;

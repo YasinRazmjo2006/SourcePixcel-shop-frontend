@@ -1,8 +1,28 @@
+import type { Metadata } from "next";
 import type { Locale } from "@/lib/types";
 import { StaticPage } from "@/components/common";
+import { buildFullMetadata } from "@/lib/seo";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const typedLocale = locale as Locale;
+
+  return buildFullMetadata({
+    locale: typedLocale,
+    titleFa: "درباره ما",
+    titleEn: "About Us",
+    descriptionFa:
+      "درباره SourcePixcel — فروشگاه اینترنتی مدرن با هدف ارائه بهترین تجربه خرید آنلاین برای کاربران ایرانی.",
+    descriptionEn:
+      "About SourcePixcel — a modern online store with the goal of providing the best online shopping experience for Iranian users.",
+    path: "/about",
+  });
 }
 
 export default async function AboutPage({ params }: PageProps) {
@@ -26,7 +46,7 @@ export default async function AboutPage({ params }: PageProps) {
             با تمرکز بر کیفیت، اصالت کالا و خدمات مشتریان، تلاش می‌کنیم تا
             خرید آنلاین را برای شما ساده‌تر، سریع‌تر و مطمئن‌تر کنیم.
           </p>
-          <h2 className="text-[16px] font-bold text-[#3F4064] mt-6 mb-2">
+          <h2 className="text-[16px] font-bold text-[#3F4064] dark:text-[#E5E5EA] mt-6 mb-2">
             چرا SourcePixcel؟
           </h2>
           <ul className="list-disc pr-5 space-y-1">
@@ -36,7 +56,7 @@ export default async function AboutPage({ params }: PageProps) {
             <li>پشتیبانی ۲۴ ساعته در ۷ روز هفته</li>
             <li>پرداخت امن از طریق درگاه‌های معتبر</li>
           </ul>
-          <h2 className="text-[16px] font-bold text-[#3F4064] mt-6 mb-2">
+          <h2 className="text-[16px] font-bold text-[#3F4064] dark:text-[#E5E5EA] mt-6 mb-2">
             چشم‌انداز ما
           </h2>
           <p>
@@ -52,7 +72,7 @@ export default async function AboutPage({ params }: PageProps) {
             a focus on quality, authenticity, and customer service, we strive
             to make online shopping simpler, faster, and safer.
           </p>
-          <h2 className="text-[16px] font-bold text-[#3F4064] mt-6 mb-2">
+          <h2 className="text-[16px] font-bold text-[#3F4064] dark:text-[#E5E5EA] mt-6 mb-2">
             Why SourcePixcel?
           </h2>
           <ul className="list-disc pl-5 space-y-1">
@@ -62,7 +82,7 @@ export default async function AboutPage({ params }: PageProps) {
             <li>24/7 support, 7 days a week</li>
             <li>Secure payment through trusted gateways</li>
           </ul>
-          <h2 className="text-[16px] font-bold text-[#3F4064] mt-6 mb-2">
+          <h2 className="text-[16px] font-bold text-[#3F4064] dark:text-[#E5E5EA] mt-6 mb-2">
             Our Vision
           </h2>
           <p>

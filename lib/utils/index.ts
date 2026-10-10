@@ -37,3 +37,10 @@ export {
   SITE_NAME_EXPORT,
   SITE_URL_EXPORT,
 } from "./seo";
+
+export {
+  generateBlurPlaceholder,
+  getCategoryColor,
+  getProductBlur,
+  CATEGORY_COLORS,
+} from "./blur";

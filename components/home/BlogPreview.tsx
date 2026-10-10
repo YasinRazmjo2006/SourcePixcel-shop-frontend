@@ -1,8 +1,8 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Calendar, Clock, ChevronLeft, ChevronRight } from "lucide-react";
 import type { Locale } from "@/lib/types";
 import { blogPosts } from "@/lib/data";
+import { SmartImage } from "@/components/common";
 
 interface BlogPreviewProps {
   locale: Locale;
@@ -35,7 +35,7 @@ export default function BlogPreview({ locale }: BlogPreviewProps) {
             className="group bg-white dark:bg-[#1A1A1E] rounded-xl border border-[#E0E0E2] dark:border-[#2A2A2E] overflow-hidden hover:shadow-lg transition-shadow"
           >
             <div className="relative aspect-video overflow-hidden bg-[#F5F5F5]">
-              <Image
+              <SmartImage
                 src={post.cover}
                 alt={isFa ? post.titleFa : post.titleEn}
                 fill
@@ -43,7 +43,7 @@ export default function BlogPreview({ locale }: BlogPreviewProps) {
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <span
-                className="absolute top-3 bg-[#EF4056] text-white text-[10px] font-medium px-2 py-1 rounded"
+                className="absolute top-3 bg-[#EF4056] text-white text-[10px] font-medium px-2 py-1 rounded z-10"
                 style={{ [isFa ? "right" : "left"]: 12 } as React.CSSProperties}
               >
                 {isFa ? post.categoryFa : post.categoryEn}

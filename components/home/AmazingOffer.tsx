@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { Flame, ChevronLeft, ChevronRight } from "lucide-react";
 import type { Locale } from "@/lib/types";
 import { getDiscountedProducts } from "@/lib/data";
@@ -47,10 +48,18 @@ export default function AmazingOffer({ locale }: AmazingOfferProps) {
   };
 
   return (
-    <div className="rounded-xl overflow-hidden bg-white dark:bg-[#1A1A1E] border border-[#E0E0E2] dark:border-[#2A2A2E]">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      className="rounded-xl overflow-hidden bg-white dark:bg-[#1A1A1E] border border-[#E0E0E2] dark:border-[#2A2A2E]"
+    >
       <div className="flex flex-col lg:flex-row">
         {/* Left panel */}
-        <div
+        <motion.div
+          initial={{ opacity: 0, x: isFa ? 20 : -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.1, duration: 0.5 }}
           className="lg:w-60 p-5 md:p-6 flex lg:flex-col items-center lg:items-start justify-between lg:justify-center gap-4 text-white shrink-0"
           style={{
             background: "linear-gradient(180deg, #EF4056 0%, #d63850 100%)",
@@ -58,9 +67,17 @@ export default function AmazingOffer({ locale }: AmazingOfferProps) {
         >
           <div className="flex flex-col items-center lg:items-start gap-2">
             <div className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
+              <motion.div
+                animate={{ scale: [1, 1.15, 1] }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center"
+              >
                 <Flame size={20} className="text-white" />
-              </div>
+              </motion.div>
               <div>
                 <h2 className="text-[15px] md:text-[17px] font-bold leading-tight">
                   {isFa ? "پیشنهاد شگفت‌انگیز" : "Amazing Offer"}
@@ -73,17 +90,20 @@ export default function AmazingOffer({ locale }: AmazingOfferProps) {
 
             {/* Countdown */}
             <div className="flex items-center gap-1.5 mt-2">
-              <div className="bg-white text-[#EF4056] rounded-lg px-2 py-1.5 text-[15px] font-bold tabular-nums min-w-[36px] text-center shadow-lg">
-                {fmt(timeLeft.seconds)}
-              </div>
-              <span className="text-white/70 text-[14px] font-bold">:</span>
-              <div className="bg-white text-[#EF4056] rounded-lg px-2 py-1.5 text-[15px] font-bold tabular-nums min-w-[36px] text-center shadow-lg">
-                {fmt(timeLeft.minutes)}
-              </div>
-              <span className="text-white/70 text-[14px] font-bold">:</span>
-              <div className="bg-white text-[#EF4056] rounded-lg px-2 py-1.5 text-[15px] font-bold tabular-nums min-w-[36px] text-center shadow-lg">
-                {fmt(timeLeft.hours)}
-              </div>
+              {[timeLeft.seconds, timeLeft.minutes, timeLeft.hours].map(
+                (value, i) => (
+                  <span key={i} className="flex items-center gap-1.5">
+                    <div className="bg-white text-[#EF4056] rounded-lg px-2 py-1.5 text-[15px] font-bold tabular-nums min-w-[36px] text-center shadow-lg">
+                      {fmt(value)}
+                    </div>
+                    {i < 2 && (
+                      <span className="text-white/70 text-[14px] font-bold">
+                        :
+                      </span>
+                    )}
+                  </span>
+                )
+              )}
             </div>
           </div>
 
@@ -94,23 +114,29 @@ export default function AmazingOffer({ locale }: AmazingOfferProps) {
             {isFa ? "مشاهده همه" : "See all"}
             {isFa ? <ChevronLeft size={14} /> : <ChevronRight size={14} />}
           </Link>
-        </div>
+        </motion.div>
 
         {/* Products */}
         <div className="flex-1 p-3 md:p-4">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-3">
             {products.map((product, index) => (
-              <ProductCard
+              <motion.div
                 key={product.id}
-                product={product}
-                locale={locale}
-                variant="compact"
-                priority={index === 0}
-              />
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 + index * 0.05 }}
+              >
+                <ProductCard
+                  product={product}
+                  locale={locale}
+                  variant="compact"
+                  priority={index === 0}
+                />
+              </motion.div>
             ))}
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

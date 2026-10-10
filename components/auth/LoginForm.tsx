@@ -3,10 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, Smartphone, Lock, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Smartphone, Loader2 } from "lucide-react";
 import type { Locale } from "@/lib/types";
 import { useAuthStore } from "@/lib/stores";
 import { isValidIranianMobile, normalizeMobile } from "@/lib/utils";
+import { RippleButton, AnimatedCheckbox } from "@/components/ui";
 
 interface LoginFormProps {
   locale: Locale;
@@ -59,7 +60,6 @@ export default function LoginForm({ locale }: LoginFormProps) {
     if (!validate()) return;
 
     setSubmitting(true);
-    // Mock login
     setTimeout(() => {
       login({
         id: `user-${Date.now()}`,
@@ -71,17 +71,16 @@ export default function LoginForm({ locale }: LoginFormProps) {
   };
 
   const inputClass = (field: "mobile" | "password") =>
-    `w-full h-11 pr-10 pl-3 rounded-lg border text-[13px] text-[#3F4064] placeholder:text-[#A1A3A8] focus:outline-none transition-colors ${
+    `w-full h-11 pr-10 pl-3 rounded-lg border text-[13px] text-[#3F4064] dark:text-[#E5E5EA] placeholder:text-[#A1A3A8] focus:outline-none transition-colors ${
       errors[field]
         ? "border-[#EF4444] focus:border-[#EF4444]"
-        : "border-[#E0E0E2] focus:border-[#EF4056]"
+        : "border-[#E0E0E2] dark:border-[#2A2A2E] focus:border-[#EF4056]"
     }`;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {/* Mobile */}
       <div>
-        <label className="block text-[12px] text-[#62666D] mb-1.5">
+        <label className="block text-[12px] text-[#62666D] dark:text-[#A1A3A8] mb-1.5">
           {t.mobile}
         </label>
         <div className="relative">
@@ -108,9 +107,8 @@ export default function LoginForm({ locale }: LoginFormProps) {
         )}
       </div>
 
-      {/* Password */}
       <div>
-        <label className="block text-[12px] text-[#62666D] mb-1.5">
+        <label className="block text-[12px] text-[#62666D] dark:text-[#A1A3A8] mb-1.5">
           {t.password}
         </label>
         <div className="relative">
@@ -135,31 +133,18 @@ export default function LoginForm({ locale }: LoginFormProps) {
           >
             {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
           </button>
-          <Lock
-            size={16}
-            className="absolute top-1/2 -translate-y-1/2 text-[#A1A3A8]"
-            style={{
-              [isFa ? "left" : "right"]: isFa ? 36 : 36,
-              display: "none",
-            } as React.CSSProperties}
-          />
         </div>
         {errors.password && (
           <p className="text-[11px] text-[#EF4444] mt-1">{errors.password}</p>
         )}
       </div>
 
-      {/* Remember + Forgot */}
       <div className="flex items-center justify-between text-[12px]">
-        <label className="flex items-center gap-2 cursor-pointer select-none">
-          <input
-            type="checkbox"
-            checked={remember}
-            onChange={(e) => setRemember(e.target.checked)}
-            className="w-4 h-4 accent-[#EF4056]"
-          />
-          <span className="text-[#62666D]">{t.remember}</span>
-        </label>
+        <AnimatedCheckbox
+          checked={remember}
+          onChange={setRemember}
+          label={t.remember}
+        />
         <Link
           href={`/${locale}/auth/forgot-password`}
           className="text-[#00BFFF] hover:underline"
@@ -168,11 +153,11 @@ export default function LoginForm({ locale }: LoginFormProps) {
         </Link>
       </div>
 
-      {/* Submit */}
-      <button
+      <RippleButton
         type="submit"
         disabled={submitting}
-        className="w-full h-11 rounded-lg bg-[#EF4056] text-white text-[14px] font-bold hover:bg-[#d63850] transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+        fullWidth
+        size="md"
       >
         {submitting ? (
           <>
@@ -182,15 +167,13 @@ export default function LoginForm({ locale }: LoginFormProps) {
         ) : (
           t.login
         )}
-      </button>
+      </RippleButton>
 
-      {/* Test hint */}
-      <p className="text-[11px] text-[#A1A3A8] text-center bg-[#F5F5F5] rounded py-2 px-3">
+      <p className="text-[11px] text-[#A1A3A8] text-center bg-[#F5F5F5] dark:bg-[#2A2A2E] rounded py-2 px-3">
         {t.hint}
       </p>
 
-      {/* Register link */}
-      <div className="text-center text-[12px] text-[#62666D] pt-3 border-t border-[#E0E0E2]">
+      <div className="text-center text-[12px] text-[#62666D] dark:text-[#A1A3A8] pt-3 border-t border-[#E0E0E2] dark:border-[#2A2A2E]">
         {t.noAccount}{" "}
         <Link
           href={`/${locale}/auth/register`}

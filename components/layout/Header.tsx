@@ -23,6 +23,7 @@ import {
   Home,
   BookOpen,
   GitCompareArrows,
+  Search,
 } from "lucide-react";
 import type { Locale } from "@/lib/types";
 import { categories } from "@/lib/data";
@@ -31,7 +32,7 @@ import ThemeToggle from "@/components/common/ThemeToggle";
 import { SearchAutocomplete } from "@/components/search";
 import { NotificationBell } from "@/components/notifications";
 
-const ICON_MAP: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
+const ICON_MAP: Record<string, React.ComponentType<{ size?: number; className?: string; "aria-hidden"?: boolean }>> = {
   Smartphone, Laptop, Tablet, Headphones, Camera, Watch,
   Gamepad2, Cable, Shirt, Footprints, Home, BookOpen,
 };
@@ -57,11 +58,27 @@ export default function Header({ locale }: HeaderProps) {
     setOpenCategory(null);
   }, [pathname]);
 
+  // Close mobile menu on Escape
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileOpen(false);
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+
   const t = {
     login: isFa ? "ورود | ثبت‌نام" : "Login | Register",
     cart: isFa ? "سبد خرید" : "Cart",
     account: isFa ? "حساب من" : "My Account",
     allCategories: isFa ? "دسته‌بندی‌ها" : "Categories",
+    search: isFa ? "جستجو" : "Search",
+    menu: isFa ? "منو" : "Menu",
+    closeMenu: isFa ? "بستن منو" : "Close menu",
+    cartItems: isFa ? "کالا در سبد" : "items in cart",
+    wishlistItems: isFa ? "کالا در علاقه‌مندی" : "items in wishlist",
+    compareItems: isFa ? "کالا در مقایسه" : "items in compare",
+    notifications: isFa ? "اعلان‌ها" : "Notifications",
   };
 
   const swapLocale = (newLocale: Locale) => {
@@ -78,6 +95,7 @@ export default function Header({ locale }: HeaderProps) {
             <Link
               href={swapLocale(isFa ? "en" : "fa")}
               className="text-[#62666D] dark:text-[#A1A3A8] hover:text-[#EF4056] transition-colors"
+              aria-label={isFa ? "Switch to English" : "تغییر به فارسی"}
             >
               {isFa ? "English" : "فارسی"}
             </Link>
@@ -90,15 +108,21 @@ export default function Header({ locale }: HeaderProps) {
             >
               {t.login}
             </Link>
-            <span className="text-[#E0E0E2] dark:text-[#2A2A2E]">|</span>
+            <span className="text-[#E0E0E2] dark:text-[#2A2A2E]" aria-hidden="true">
+              |
+            </span>
             <NotificationBell locale={locale} variant="top" />
             <Link
               href={`/${locale}/compare`}
               className="text-[#62666D] dark:text-[#A1A3A8] hover:text-[#EF4056] transition-colors flex items-center gap-1 relative"
+              aria-label={`${t.compareItems}: ${compareCount}`}
             >
-              <GitCompareArrows size={14} />
+              <GitCompareArrows size={14} aria-hidden="true" />
               {mounted && compareCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-[#EF4056] text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
+                <span
+                  className="absolute -top-2 -right-2 bg-[#EF4056] text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center"
+                  aria-hidden="true"
+                >
                   {compareCount}
                 </span>
               )}
@@ -106,10 +130,14 @@ export default function Header({ locale }: HeaderProps) {
             <Link
               href={`/${locale}/account/wishlist`}
               className="text-[#62666D] dark:text-[#A1A3A8] hover:text-[#EF4056] transition-colors flex items-center gap-1 relative"
+              aria-label={`${t.wishlistItems}: ${wishlistCount}`}
             >
-              <Heart size={14} />
+              <Heart size={14} aria-hidden="true" />
               {mounted && wishlistCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-[#EF4056] text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
+                <span
+                  className="absolute -top-2 -right-2 bg-[#EF4056] text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center"
+                  aria-hidden="true"
+                >
                   {wishlistCount}
                 </span>
               )}
@@ -117,10 +145,14 @@ export default function Header({ locale }: HeaderProps) {
             <Link
               href={`/${locale}/cart`}
               className="text-[#62666D] dark:text-[#A1A3A8] hover:text-[#EF4056] transition-colors flex items-center gap-1 relative"
+              aria-label={`${t.cartItems}: ${totalItems}`}
             >
-              <ShoppingCart size={14} />
+              <ShoppingCart size={14} aria-hidden="true" />
               {mounted && totalItems > 0 && (
-                <span className="absolute -top-2 -right-2 bg-[#EF4056] text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
+                <span
+                  className="absolute -top-2 -right-2 bg-[#EF4056] text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center"
+                  aria-hidden="true"
+                >
                   {totalItems}
                 </span>
               )}
@@ -130,17 +162,23 @@ export default function Header({ locale }: HeaderProps) {
       </div>
 
       {/* Main header */}
-      <div className="bg-white dark:bg-[#1A1A1E] border-b border-[#E0E0E2] dark:border-[#2A2A2E] sticky top-0 z-50">
+      <header className="bg-white dark:bg-[#1A1A1E] border-b border-[#E0E0E2] dark:border-[#2A2A2E] sticky top-0 z-50">
         <div className="max-w-[1400px] mx-auto px-4 h-16 flex items-center gap-4">
           <button
             className="lg:hidden text-[#3F4064] dark:text-[#E5E5EA]"
             onClick={() => setMobileOpen(true)}
-            aria-label="Open menu"
+            aria-label={t.menu}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-menu"
           >
-            <Menu size={24} />
+            <Menu size={24} aria-hidden="true" />
           </button>
 
-          <Link href={`/${locale}`} className="text-[#EF4056] font-bold text-xl shrink-0">
+          <Link
+            href={`/${locale}`}
+            className="text-[#EF4056] font-bold text-xl shrink-0"
+            aria-label="SourcePixcel — Home"
+          >
             SourcePixcel
           </Link>
 
@@ -152,20 +190,21 @@ export default function Header({ locale }: HeaderProps) {
             href={`/${locale}/account`}
             className="hidden lg:flex items-center gap-2 text-[#3F4064] dark:text-[#E5E5EA] text-sm hover:text-[#EF4056] transition-colors"
           >
-            <User size={20} />
+            <User size={20} aria-hidden="true" />
             <span>{t.account}</span>
           </Link>
 
-          <div className="hidden lg:block w-px h-6 bg-[#E0E0E2] dark:bg-[#2A2A2E]" />
+          <div className="hidden lg:block w-px h-6 bg-[#E0E0E2] dark:bg-[#2A2A2E]" aria-hidden="true" />
 
           <Link
             href={`/${locale}/cart`}
             className="hidden lg:flex items-center gap-2 text-[#3F4064] dark:text-[#E5E5EA] text-sm hover:text-[#EF4056] transition-colors relative"
+            aria-label={`${t.cart}: ${totalItems} ${t.cartItems}`}
           >
-            <ShoppingCart size={20} />
+            <ShoppingCart size={20} aria-hidden="true" />
             <span>{t.cart}</span>
             {mounted && totalItems > 0 && (
-              <span className="bg-[#EF4056] text-white text-[10px] rounded-full w-5 h-5 flex items-center justify-center font-bold">
+              <span className="bg-[#EF4056] text-white text-[10px] rounded-full w-5 h-5 flex items-center justify-center font-bold" aria-hidden="true">
                 {totalItems}
               </span>
             )}
@@ -173,14 +212,17 @@ export default function Header({ locale }: HeaderProps) {
         </div>
 
         {/* Mega menu */}
-        <div className="hidden lg:block border-t border-[#E0E0E2] dark:border-[#2A2A2E]">
+        <nav
+          className="hidden lg:block border-t border-[#E0E0E2] dark:border-[#2A2A2E]"
+          aria-label={isFa ? "منوی اصلی" : "Main navigation"}
+        >
           <div className="max-w-[1400px] mx-auto px-4">
-            <nav className="flex items-center gap-1 h-12">
+            <ul className="flex items-center gap-1 h-12 list-none m-0 p-0">
               {categories.map((cat) => {
                 const Icon = ICON_MAP[cat.icon] ?? Cable;
                 const isOpen = openCategory === cat.id;
                 return (
-                  <div
+                  <li
                     key={cat.id}
                     className="relative"
                     onMouseEnter={() => setOpenCategory(cat.id)}
@@ -189,39 +231,53 @@ export default function Header({ locale }: HeaderProps) {
                     <Link
                       href={`/${locale}/category/${cat.slug}`}
                       className="flex items-center gap-2 px-3 py-2 text-[13px] text-[#3F4064] dark:text-[#E5E5EA] hover:text-[#EF4056] transition-colors whitespace-nowrap"
+                      aria-haspopup={cat.subcategories.length > 0}
+                      aria-expanded={isOpen}
                     >
-                      <Icon size={16} />
+                      <Icon size={16} aria-hidden="true" />
                       <span>{isFa ? cat.nameFa : cat.nameEn}</span>
-                      <ChevronDown size={12} className="opacity-50" />
+                      {cat.subcategories.length > 0 && (
+                        <ChevronDown size={12} className="opacity-50" aria-hidden="true" />
+                      )}
                     </Link>
 
                     {isOpen && cat.subcategories.length > 0 && (
                       <div className="absolute top-full right-0 bg-white dark:bg-[#1A1A1E] border border-[#E0E0E2] dark:border-[#2A2A2E] rounded-lg shadow-lg py-2 min-w-[200px] z-50">
-                        {cat.subcategories.map((sub) => (
-                          <Link
-                            key={sub.id}
-                            href={`/${locale}/category/${cat.slug}?sub=${sub.id}`}
-                            className="block px-4 py-2 text-[13px] text-[#62666D] dark:text-[#A1A3A8] hover:bg-[#F5F5F5] dark:hover:bg-[#2A2A2E] hover:text-[#EF4056] transition-colors"
-                          >
-                            {isFa ? sub.nameFa : sub.nameEn}
-                          </Link>
-                        ))}
+                        <ul className="list-none m-0 p-0">
+                          {cat.subcategories.map((sub) => (
+                            <li key={sub.id}>
+                              <Link
+                                href={`/${locale}/category/${cat.slug}?sub=${sub.id}`}
+                                className="block px-4 py-2 text-[13px] text-[#62666D] dark:text-[#A1A3A8] hover:bg-[#F5F5F5] dark:hover:bg-[#2A2A2E] hover:text-[#EF4056] transition-colors"
+                              >
+                                {isFa ? sub.nameFa : sub.nameEn}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     )}
-                  </div>
+                  </li>
                 );
               })}
-            </nav>
+            </ul>
           </div>
-        </div>
-      </div>
+        </nav>
+      </header>
 
       {/* Mobile drawer */}
       {mobileOpen && (
-        <div className="fixed inset-0 z-[100] lg:hidden">
+        <div
+          className="fixed inset-0 z-[100] lg:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label={t.menu}
+          id="mobile-menu"
+        >
           <div
             className="absolute inset-0 bg-black/40"
             onClick={() => setMobileOpen(false)}
+            aria-hidden="true"
           />
           <div
             className="absolute top-0 bottom-0 bg-white dark:bg-[#1A1A1E] w-80 max-w-[85%] overflow-y-auto"
@@ -229,8 +285,11 @@ export default function Header({ locale }: HeaderProps) {
           >
             <div className="flex items-center justify-between p-4 border-b border-[#E0E0E2] dark:border-[#2A2A2E]">
               <span className="text-[#EF4056] font-bold text-lg">SourcePixcel</span>
-              <button onClick={() => setMobileOpen(false)} aria-label="Close menu">
-                <X size={24} className="text-[#3F4064] dark:text-[#E5E5EA]" />
+              <button
+                onClick={() => setMobileOpen(false)}
+                aria-label={t.closeMenu}
+              >
+                <X size={24} className="text-[#3F4064] dark:text-[#E5E5EA]" aria-hidden="true" />
               </button>
             </div>
 
@@ -255,24 +314,27 @@ export default function Header({ locale }: HeaderProps) {
                 </Link>
               </div>
 
-              <div className="border-t border-[#E0E0E2] dark:border-[#2A2A2E] pt-4">
+              <nav className="border-t border-[#E0E0E2] dark:border-[#2A2A2E] pt-4" aria-label={t.allCategories}>
                 <div className="text-xs font-bold text-[#A1A3A8] mb-2">
                   {t.allCategories}
                 </div>
-                {categories.map((cat) => {
-                  const Icon = ICON_MAP[cat.icon] ?? Cable;
-                  return (
-                    <Link
-                      key={cat.id}
-                      href={`/${locale}/category/${cat.slug}`}
-                      className="flex items-center gap-3 py-2 text-sm text-[#3F4064] dark:text-[#E5E5EA] hover:text-[#EF4056]"
-                    >
-                      <Icon size={18} />
-                      <span>{isFa ? cat.nameFa : cat.nameEn}</span>
-                    </Link>
-                  );
-                })}
-              </div>
+                <ul className="list-none m-0 p-0">
+                  {categories.map((cat) => {
+                    const Icon = ICON_MAP[cat.icon] ?? Cable;
+                    return (
+                      <li key={cat.id}>
+                        <Link
+                          href={`/${locale}/category/${cat.slug}`}
+                          className="flex items-center gap-3 py-2 text-sm text-[#3F4064] dark:text-[#E5E5EA] hover:text-[#EF4056]"
+                        >
+                          <Icon size={18} aria-hidden="true" />
+                          <span>{isFa ? cat.nameFa : cat.nameEn}</span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </nav>
             </div>
           </div>
         </div>

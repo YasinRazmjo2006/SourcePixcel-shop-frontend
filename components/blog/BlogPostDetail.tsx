@@ -1,9 +1,7 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Calendar, Clock, User, Tag, ArrowRight, ArrowLeft } from "lucide-react";
 import type { BlogPost, Locale } from "@/lib/types";
-import { Breadcrumb } from "@/components/common";
-import BlogCard from "./BlogCard";
+import { Breadcrumb, SmartImage } from "@/components/common";
 
 interface BlogPostDetailProps {
   locale: Locale;
@@ -36,11 +34,9 @@ export default function BlogPostDetail({
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Main content */}
-        <article className="lg:col-span-2 bg-white rounded-lg border border-[#E0E0E2] overflow-hidden">
-          {/* Cover */}
+        <article className="lg:col-span-2 bg-white dark:bg-[#1A1A1E] rounded-xl border border-[#E0E0E2] dark:border-[#2A2A2E] overflow-hidden">
           <div className="relative aspect-video">
-            <Image
+            <SmartImage
               src={post.cover}
               alt={title}
               fill
@@ -51,7 +47,6 @@ export default function BlogPostDetail({
           </div>
 
           <div className="p-5 md:p-7">
-            {/* Category */}
             <div className="mb-3">
               <Link
                 href={`/${locale}/blog`}
@@ -61,13 +56,11 @@ export default function BlogPostDetail({
               </Link>
             </div>
 
-            {/* Title */}
-            <h1 className="text-[22px] md:text-[26px] font-bold text-[#3F4064] leading-9 mb-4">
+            <h1 className="text-[22px] md:text-[26px] font-bold text-[#3F4064] dark:text-[#E5E5EA] leading-9 mb-4">
               {title}
             </h1>
 
-            {/* Meta */}
-            <div className="flex items-center gap-4 text-[11px] text-[#A1A3A8] pb-4 mb-5 border-b border-[#E0E0E2] flex-wrap">
+            <div className="flex items-center gap-4 text-[11px] text-[#A1A3A8] pb-4 mb-5 border-b border-[#E0E0E2] dark:border-[#2A2A2E] flex-wrap">
               <span className="flex items-center gap-1">
                 <User size={12} />
                 {author}
@@ -82,19 +75,17 @@ export default function BlogPostDetail({
               </span>
             </div>
 
-            {/* Content */}
-            <div className="text-[13px] md:text-[14px] text-[#3F4064] leading-8 whitespace-pre-line">
+            <div className="prose text-[13px] md:text-[14px] text-[#62666D] dark:text-[#A1A3A8] whitespace-pre-line">
               {content}
             </div>
 
-            {/* Tags */}
             {post.tags.length > 0 && (
-              <div className="flex items-center gap-2 mt-8 pt-5 border-t border-[#E0E0E2] flex-wrap">
+              <div className="flex items-center gap-2 mt-8 pt-5 border-t border-[#E0E0E2] dark:border-[#2A2A2E] flex-wrap">
                 <Tag size={14} className="text-[#A1A3A8]" />
                 {post.tags.map((tag, i) => (
                   <span
                     key={i}
-                    className="text-[11px] bg-[#F5F5F5] text-[#62666D] px-2 py-1 rounded"
+                    className="text-[11px] bg-[#F5F5F5] dark:bg-[#2A2A2E] text-[#62666D] dark:text-[#A1A3A8] px-2 py-1 rounded"
                   >
                     {tag}
                   </span>
@@ -102,7 +93,6 @@ export default function BlogPostDetail({
               </div>
             )}
 
-            {/* Back */}
             <div className="mt-6">
               <Link
                 href={`/${locale}/blog`}
@@ -115,10 +105,9 @@ export default function BlogPostDetail({
           </div>
         </article>
 
-        {/* Sidebar - related posts */}
         <aside className="lg:col-span-1">
-          <div className="bg-white rounded-lg border border-[#E0E0E2] p-4 sticky top-24">
-            <h2 className="text-[14px] font-bold text-[#3F4064] mb-4">
+          <div className="bg-white dark:bg-[#1A1A1E] rounded-xl border border-[#E0E0E2] dark:border-[#2A2A2E] p-4 sticky top-24">
+            <h2 className="text-[14px] font-bold text-[#3F4064] dark:text-[#E5E5EA] mb-4">
               {isFa ? "مطالب مرتبط" : "Related Posts"}
             </h2>
             <div className="space-y-3">
@@ -128,8 +117,8 @@ export default function BlogPostDetail({
                   href={`/${locale}/blog/${rp.slug}`}
                   className="flex gap-3 group"
                 >
-                  <div className="w-20 h-16 rounded-lg bg-[#F5F5F5] overflow-hidden relative shrink-0">
-                    <Image
+                  <div className="w-20 h-16 rounded-lg bg-[#F5F5F5] dark:bg-[#2A2A2E] overflow-hidden relative shrink-0">
+                    <SmartImage
                       src={rp.cover}
                       alt={isFa ? rp.titleFa : rp.titleEn}
                       fill
@@ -138,7 +127,7 @@ export default function BlogPostDetail({
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-[12px] font-medium text-[#3F4064] leading-5 line-clamp-2 group-hover:text-[#EF4056] transition-colors">
+                    <h3 className="text-[12px] font-medium text-[#3F4064] dark:text-[#E5E5EA] leading-5 line-clamp-2 group-hover:text-[#EF4056] transition-colors">
                       {isFa ? rp.titleFa : rp.titleEn}
                     </h3>
                     <div className="text-[10px] text-[#A1A3A8] mt-1">

@@ -8,7 +8,7 @@ import {
 } from "@/lib/data";
 import { BlogPostDetail } from "@/components/blog";
 import JsonLd from "@/components/common/JsonLd";
-import { buildMetadata, SITE_URL_EXPORT } from "@/lib/utils";
+import { buildFullMetadata, articleSchema, SEO } from "@/lib/seo";
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>;
@@ -29,15 +29,18 @@ export async function generateMetadata({
   const post = getBlogPostBySlug(slug);
   if (!post) return { title: "Post not found" };
 
-  return buildMetadata({
+  const isFa = typedLocale === "fa";
+
+  return buildFullMetadata({
     locale: typedLocale,
-    titleFa: `${post.titleFa} | وبلاگ SourcePixcel`,
-    titleEn: `${post.titleEn} | SourcePixcel Blog`,
+    titleFa: post.titleFa,
+    titleEn: post.titleEn,
     descriptionFa: post.excerptFa,
     descriptionEn: post.excerptEn,
     path: `/blog/${slug}`,
     image: post.cover,
     type: "article",
+    authors: [isFa ? post.authorFa : post.authorEn],
   });
 }
 
@@ -51,32 +54,21 @@ export default async function BlogPostPage({ params }: PageProps) {
   const related = getRelatedBlogPosts(slug, 3);
   const isFa = typedLocale === "fa";
 
-  const articleSchema = {
-    "@context": "https://schema.org",
-    "@type": "Article",
+  const aSchema = articleSchema({
     headline: isFa ? post.titleFa : post.titleEn,
     description: isFa ? post.excerptFa : post.excerptEn,
     image: post.cover,
-    author: {
-      "@type": "Person",
-      name: isFa ? post.authorFa : post.authorEn,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "SourcePixcel",
-      logo: {
-        "@type": "ImageObject",
-        url: `${SITE_URL_EXPORT}/favicon.svg`,
-      },
-    },
-    url: `${SITE_URL_EXPORT}/${typedLocale}/blog/${slug}`,
-    articleSection: isFa ? post.categoryFa : post.categoryEn,
-    keywords: post.tags.join(", "),
-  };
+    author: isFa ? post.authorFa : post.authorEn,
+    publishedTime: post.dateEn,
+    url: `${SEO.SITE_URL}/${typedLocale}/blog/${slug}`,
+    category: isFa ? post.categoryFa : post.categoryEn,
+    keywords: post.tags,
+    locale: typedLocale,
+  });
 
   return (
     <>
-      <JsonLd data={articleSchema} />
+      <JsonLd data={aSchema} />
       <BlogPostDetail
         locale={typedLocale}
         post={post}

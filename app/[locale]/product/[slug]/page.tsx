@@ -7,6 +7,7 @@ import {
   getProductsByCategory,
   getCategoryById,
   getBrandById,
+  getReviewsForProduct,
 } from "@/lib/data";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import JsonLd from "@/components/common/JsonLd";
@@ -16,11 +17,12 @@ import {
   RelatedProducts,
 } from "@/components/product";
 import {
-  buildMetadata,
-  buildProductSchema,
-  buildBreadcrumbSchema,
-  SITE_URL_EXPORT,
-} from "@/lib/utils";
+  buildFullMetadata,
+  productSchema,
+  breadcrumbSchema,
+  reviewSchema,
+  SEO,
+} from "@/lib/seo";
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>;
@@ -43,12 +45,23 @@ export async function generateMetadata({
     return { title: "Product not found" };
   }
 
-  return buildMetadata({
+  const brand = getBrandById(product.brand);
+  const category = getCategoryById(product.category);
+  const isFa = typedLocale === "fa";
+
+  const title = isFa ? product.titleFa : product.titleEn;
+  const brandName = brand ? (isFa ? brand.nameFa : brand.nameEn) : "";
+  const categoryName = category ? (isFa ? category.nameFa : category.nameEn) : "";
+
+  const descriptionFa = `خرید ${product.titleFa} با بهترین قیمت و ارسال سریع از SourcePixcel. ${brandName} ${categoryName} با ضمانت اصالت و ۷ روز مهلت بازگشت.`;
+  const descriptionEn = `Buy ${product.titleEn} at the best price with fast shipping from SourcePixcel. ${brandName} ${categoryName} with authenticity guarantee and 7-day return.`;
+
+  return buildFullMetadata({
     locale: typedLocale,
-    titleFa: `${product.titleFa} | SourcePixcel`,
-    titleEn: `${product.titleEn} | SourcePixcel`,
-    descriptionFa: product.titleFa,
-    descriptionEn: product.titleEn,
+    titleFa: `${product.titleFa} | ${brandName}`,
+    titleEn: `${product.titleEn} | ${brandName}`,
+    descriptionFa,
+    descriptionEn,
     path: `/product/${slug}`,
     image: product.image,
     type: "product",
@@ -91,38 +104,62 @@ export default async function ProductPage({ params }: PageProps) {
     labelEn: product.titleEn,
   });
 
-  const productSchema = buildProductSchema({
+  // JSON-LD Schemas
+  const productUrl = `${SEO.SITE_URL}/${typedLocale}/product/${slug}`;
+  const reviews = getReviewsForProduct(product.id);
+
+  const pSchema = productSchema({
     name: isFa ? product.titleFa : product.titleEn,
-    description: isFa ? product.titleFa : product.titleEn,
+    description: isFa
+      ? `خرید ${product.titleFa} با ضمانت اصالت و ارسال سریع`
+      : `Buy ${product.titleEn} with authenticity guarantee and fast shipping`,
     image: product.image,
     sku: `SP-${product.id.toString().padStart(5, "0")}`,
+    brand: brand ? (isFa ? brand.nameFa : brand.nameEn) : "SourcePixcel",
     price: product.finalPrice,
+    currency: "IRR",
     inStock: product.inStock,
+    url: productUrl,
     rating: product.rating,
     reviewCount: product.reviewCount,
-    brand: brand ? (isFa ? brand.nameFa : brand.nameEn) : undefined,
-    url: `${SITE_URL_EXPORT}/${typedLocale}/product/${slug}`,
+    category: category ? (isFa ? category.nameFa : category.nameEn) : undefined,
+    locale: typedLocale,
   });
 
-  const breadcrumbSchema = buildBreadcrumbSchema([
-    { name: isFa ? "خانه" : "Home", url: `${SITE_URL_EXPORT}/${typedLocale}` },
+  const bSchema = breadcrumbSchema([
+    { name: isFa ? "خانه" : "Home", url: `${SEO.SITE_URL}/${typedLocale}` },
     ...(category
       ? [
           {
             name: isFa ? category.nameFa : category.nameEn,
-            url: `${SITE_URL_EXPORT}/${typedLocale}/category/${category.slug}`,
+            url: `${SEO.SITE_URL}/${typedLocale}/category/${category.slug}`,
           },
         ]
       : []),
     {
       name: isFa ? product.titleFa : product.titleEn,
-      url: `${SITE_URL_EXPORT}/${typedLocale}/product/${slug}`,
+      url: productUrl,
     },
   ]);
 
+  const rSchema = reviewSchema({
+    itemName: isFa ? product.titleFa : product.titleEn,
+    itemType: "Product",
+    reviews: reviews.slice(0, 5).map((r) => ({
+      author: r.authorName,
+      rating: r.rating,
+      text: r.body,
+      datePublished: r.date,
+    })),
+    aggregateRating: {
+      ratingValue: product.rating,
+      reviewCount: product.reviewCount,
+    },
+  });
+
   return (
     <>
-      <JsonLd data={[productSchema, breadcrumbSchema]} />
+      <JsonLd data={[pSchema, bSchema, rSchema]} />
       <div className="max-w-[1400px] mx-auto px-4 py-4 space-y-4">
         <Breadcrumb locale={typedLocale} items={breadcrumbItems} />
         <ProductDetail product={product} locale={typedLocale} />
