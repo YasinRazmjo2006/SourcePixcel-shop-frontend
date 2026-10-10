@@ -22,7 +22,7 @@ const nextConfig = {
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-    minimumCacheTTL: 60 * 60 * 24 * 365, // 1 year
+    minimumCacheTTL: 60 * 60 * 24 * 365,
   },
 
   // Experimental optimizations
@@ -32,45 +32,21 @@ const nextConfig = {
       "framer-motion",
       "date-fns",
     ],
-    optimizeCss: false, // Keep false to avoid issues with static export
   },
 
   // Compiler options
   compiler: {
-    // Remove console.log in production
     removeConsole:
       process.env.NODE_ENV === "production"
         ? { exclude: ["error", "warn"] }
         : false,
   },
 
-  // Headers for caching
-  async headers() {
-    return [
-      {
-        source: "/images/:path*",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
-      {
-        source: "/fonts/:path*",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
-    ];
-  },
+  // ⚠️ headers() حذف شد — با static export سازگار نیست
+  // Cache headers از طریق Cloudflare تنظیم می‌شوند
 
   // Webpack customizations
   webpack: (config, { isServer, dev }) => {
-    // Reduce bundle size in production
     if (!dev && !isServer) {
       config.optimization = {
         ...config.optimization,
@@ -79,28 +55,24 @@ const nextConfig = {
           cacheGroups: {
             default: false,
             vendors: false,
-            // Vendor chunk
             vendor: {
               name: "vendor",
               chunks: "all",
               test: /node_modules/,
               priority: 20,
             },
-            // Separate framer-motion
             framerMotion: {
               name: "framer-motion",
               test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
               chunks: "all",
               priority: 30,
             },
-            // Separate lucide
             lucide: {
               name: "lucide",
               test: /[\\/]node_modules[\\/]lucide-react[\\/]/,
               chunks: "all",
               priority: 30,
             },
-            // Common chunk
             common: {
               name: "common",
               minChunks: 2,
