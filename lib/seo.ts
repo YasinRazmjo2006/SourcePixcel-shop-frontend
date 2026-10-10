@@ -7,7 +7,7 @@ const SITE_DESCRIPTION_FA =
   "فروشگاه اینترنتی SourcePixcel — خرید آنلاین موبایل، لپ‌تاپ، لوازم خانگی، پوشاک و لوازم جانبی با ارسال سریع و ضمانت اصالت.";
 const SITE_DESCRIPTION_EN =
   "SourcePixcel online store — shop mobile phones, laptops, home appliances, fashion, and accessories with fast shipping and authenticity guarantee.";
-const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
+const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.svg`;
 const TWITTER_HANDLE = "@sourcepixcel";
 
 export const SEO = {

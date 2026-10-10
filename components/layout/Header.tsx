@@ -32,7 +32,14 @@ import ThemeToggle from "@/components/common/ThemeToggle";
 import { SearchAutocomplete } from "@/components/search";
 import { NotificationBell } from "@/components/notifications";
 
-const ICON_MAP: Record<string, React.ComponentType<{ size?: number; className?: string; "aria-hidden"?: boolean }>> = {
+const ICON_MAP: Record<
+  string,
+  React.ComponentType<{
+    size?: number;
+    className?: string;
+    "aria-hidden"?: boolean | "true" | "false";
+  }>
+> = {
   Smartphone, Laptop, Tablet, Headphones, Camera, Watch,
   Gamepad2, Cable, Shirt, Footprints, Home, BookOpen,
 };

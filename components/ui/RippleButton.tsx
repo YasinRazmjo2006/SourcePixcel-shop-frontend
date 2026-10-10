@@ -10,8 +10,23 @@ interface Ripple {
   size: number;
 }
 
+// ✅ Omit برای حذف props های متضاد با framer-motion
 interface RippleButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  extends Omit<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    | "onDrag"
+    | "onDragStart"
+    | "onDragEnd"
+    | "onDragEnter"
+    | "onDragExit"
+    | "onDragLeave"
+    | "onDragOver"
+    | "onDrop"
+    | "onAnimationStart"
+    | "onAnimationEnd"
+    | "onAnimationIteration"
+    | "style"
+  > {
   children: React.ReactNode;
   variant?: "primary" | "secondary" | "success" | "danger" | "ghost";
   size?: "sm" | "md" | "lg";

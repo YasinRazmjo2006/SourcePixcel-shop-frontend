@@ -24,6 +24,13 @@ import {
   SEO,
 } from "@/lib/seo";
 
+// ✅ تایپ صریح برای Breadcrumb
+interface BreadcrumbItem {
+  labelFa: string;
+  labelEn: string;
+  href?: string;
+}
+
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>;
 }
@@ -83,7 +90,8 @@ export default async function ProductPage({ params }: PageProps) {
     .filter((p) => p.id !== product.id)
     .slice(0, 5);
 
-  const breadcrumbItems = [
+  // ✅ تایپ صریح BreadcrumbItem[]
+  const breadcrumbItems: BreadcrumbItem[] = [
     {
       labelFa: "دسته‌بندی‌ها",
       labelEn: "Categories",
@@ -102,6 +110,7 @@ export default async function ProductPage({ params }: PageProps) {
   breadcrumbItems.push({
     labelFa: product.titleFa,
     labelEn: product.titleEn,
+    // بدون href چون صفحه فعلیه
   });
 
   // JSON-LD Schemas

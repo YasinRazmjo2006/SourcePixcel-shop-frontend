@@ -1,10 +1,18 @@
 import { notFound } from "next/navigation";
 import type { Locale } from "@/lib/types";
-import { getOrderById } from "@/lib/data";
+import { getOrderById, mockOrders } from "@/lib/data";
 import { OrderDetailView } from "@/components/account";
 
 interface PageProps {
   params: Promise<{ locale: string; id: string }>;
+}
+
+// ✅ generateStaticParams — required for static export
+export async function generateStaticParams() {
+  const locales = ["fa", "en"];
+  return locales.flatMap((locale) =>
+    mockOrders.map((order) => ({ locale, id: order.id }))
+  );
 }
 
 export default async function OrderDetailPage({ params }: PageProps) {

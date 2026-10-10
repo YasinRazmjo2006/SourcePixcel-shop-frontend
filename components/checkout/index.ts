@@ -1,4 +1,5 @@
 // components/checkout/index.ts
+export { default as CheckoutPage } from "./CheckoutPage";
 export { default as StepIndicator } from "./StepIndicator";
 export { default as ShippingForm } from "./ShippingForm";
 export { default as ShippingMethod } from "./ShippingMethod";

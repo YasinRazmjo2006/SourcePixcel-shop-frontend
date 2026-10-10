@@ -20,7 +20,10 @@ interface NotificationBellProps {
   variant?: "top" | "header";
 }
 
-const TYPE_ICONS: Record<NotificationType, React.ComponentType<{ size?: number }>> = {
+const TYPE_ICONS: Record<
+  NotificationType,
+  React.ComponentType<{ size?: number; "aria-hidden"?: boolean }>
+> = {
   order: Package,
   promo: Tag,
   system: Info,
@@ -55,16 +58,19 @@ export default function NotificationBell({
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(e.target as Node)
+      ) {
         setOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const unreadCount = items.filter((n) => !n.read).length;
-
   const iconSize = variant === "top" ? 14 : 20;
 
   return (
@@ -78,7 +84,7 @@ export default function NotificationBell({
             : "text-[#3F4064] dark:text-[#E5E5EA] text-sm hover:text-[#EF4056] transition-colors flex items-center gap-2 relative"
         }
       >
-        <Bell size={iconSize} />
+        <Bell size={iconSize} aria-hidden={true} />
         {variant === "header" && (
           <span>{isFa ? "اعلان‌ها" : "Notifications"}</span>
         )}
@@ -97,13 +103,7 @@ export default function NotificationBell({
 
       {open && (
         <div
-          className={`absolute top-full mt-2 bg-white dark:bg-[#1A1A1E] border border-[#E0E0E2] dark:border-[#2A2A2E] rounded-xl shadow-2xl overflow-hidden z-[60] w-80 md:w-96 ${
-            isFa ? "left-0 md:left-auto md:right-0" : "right-0 md:right-auto md:left-0"
-          }`}
-          style={{
-            [isFa ? "left" : "right"]: variant === "top" ? "auto" : 0,
-            [isFa ? "right" : "left"]: variant === "top" ? 0 : "auto",
-          } as React.CSSProperties}
+          className="absolute top-full mt-2 bg-white dark:bg-[#1A1A1E] border border-[#E0E0E2] dark:border-[#2A2A2E] rounded-xl shadow-2xl overflow-hidden z-[60] w-80 md:w-96 left-0 md:left-auto md:right-0"
         >
           {/* Header */}
           <div className="flex items-center justify-between p-3 border-b border-[#E0E0E2] dark:border-[#2A2A2E]">
@@ -122,9 +122,8 @@ export default function NotificationBell({
                 <button
                   onClick={markAllAsRead}
                   className="text-[10px] text-[#00BFFF] hover:underline flex items-center gap-1"
-                  title={isFa ? "خواندن همه" : "Mark all as read"}
                 >
-                  <Check size={11} />
+                  <Check size={11} aria-hidden={true} />
                   {isFa ? "خواندن همه" : "Read all"}
                 </button>
               )}
@@ -133,7 +132,7 @@ export default function NotificationBell({
                 className="w-6 h-6 rounded-lg flex items-center justify-center text-[#A1A3A8] hover:bg-[#F5F5F5] dark:hover:bg-[#2A2A2E]"
                 aria-label="Close"
               >
-                <X size={14} />
+                <X size={14} aria-hidden={true} />
               </button>
             </div>
           </div>
@@ -143,7 +142,7 @@ export default function NotificationBell({
             {items.length === 0 ? (
               <div className="p-8 text-center">
                 <div className="w-14 h-14 rounded-full bg-[#F5F5F5] dark:bg-[#2A2A2E] flex items-center justify-center mx-auto mb-3">
-                  <Bell size={24} className="text-[#A1A3A8]" />
+                  <Bell size={24} className="text-[#A1A3A8]" aria-hidden={true} />
                 </div>
                 <p className="text-[12px] text-[#62666D] dark:text-[#A1A3A8]">
                   {isFa ? "اعلان جدیدی ندارید" : "No notifications yet"}
@@ -153,32 +152,14 @@ export default function NotificationBell({
               items.map((notif) => {
                 const Icon = TYPE_ICONS[notif.type];
                 const color = TYPE_COLORS[notif.type];
-                const Wrapper = notif.href ? Link : "div";
-                const wrapperProps = notif.href
-                  ? {
-                      href: `/${locale}${notif.href}`,
-                      onClick: () => {
-                        markAsRead(notif.id);
-                        setOpen(false);
-                      },
-                    }
-                  : {
-                      onClick: () => markAsRead(notif.id),
-                    };
 
-                return (
-                  <Wrapper
-                    key={notif.id}
-                    {...(wrapperProps as React.ComponentProps<typeof Link>)}
-                    className={`flex items-start gap-3 p-3 border-b border-[#F5F5F5] dark:border-[#2A2A2E] last:border-0 hover:bg-[#FAFAFA] dark:hover:bg-[#2A2A2E]/50 transition-colors cursor-pointer relative group ${
-                      !notif.read ? "bg-[#EF4056]/[0.03]" : ""
-                    }`}
-                  >
+                const content = (
+                  <>
                     <div
                       className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
                       style={{ backgroundColor: `${color}15` }}
                     >
-                      <Icon size={16} />
+                      <Icon size={16} aria-hidden={true} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
@@ -211,9 +192,39 @@ export default function NotificationBell({
                       aria-label="Remove"
                       className="w-6 h-6 rounded-lg flex items-center justify-center text-[#A1A3A8] hover:bg-[#EF4444]/10 hover:text-[#EF4444] opacity-0 group-hover:opacity-100 transition-all shrink-0"
                     >
-                      <Trash2 size={12} />
+                      <Trash2 size={12} aria-hidden={true} />
                     </button>
-                  </Wrapper>
+                  </>
+                );
+
+                const itemClassName = `flex items-start gap-3 p-3 border-b border-[#F5F5F5] dark:border-[#2A2A2E] last:border-0 hover:bg-[#FAFAFA] dark:hover:bg-[#2A2A2E]/50 transition-colors cursor-pointer relative group ${
+                  !notif.read ? "bg-[#EF4056]/[0.03]" : ""
+                }`;
+
+                if (notif.href) {
+                  return (
+                    <Link
+                      key={notif.id}
+                      href={`/${locale}${notif.href}`}
+                      onClick={() => {
+                        markAsRead(notif.id);
+                        setOpen(false);
+                      }}
+                      className={itemClassName}
+                    >
+                      {content}
+                    </Link>
+                  );
+                }
+
+                return (
+                  <div
+                    key={notif.id}
+                    onClick={() => markAsRead(notif.id)}
+                    className={itemClassName}
+                  >
+                    {content}
+                  </div>
                 );
               })
             )}
@@ -226,7 +237,7 @@ export default function NotificationBell({
                 onClick={clearAll}
                 className="w-full text-[11px] text-[#EF4444] hover:bg-[#EF4444]/5 rounded-lg py-2 transition-colors flex items-center justify-center gap-1"
               >
-                <Trash2 size={12} />
+                <Trash2 size={12} aria-hidden={true} />
                 {isFa ? "پاک کردن همه" : "Clear all"}
               </button>
             </div>
