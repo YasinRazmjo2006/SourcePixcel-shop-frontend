@@ -1,21 +1,40 @@
-import AdminStats from "./AdminStats";
-import SalesChart from "./SalesChart";
-import TopProducts from "./TopProducts";
-import RecentOrders from "./RecentOrders";
+"use client";
+
+import type { Locale } from "@/lib/types";
+import { useAdminStore } from "@/lib/stores";
+import {
+  KpiCards,
+  SalesChart,
+  CategoryChart,
+  SharePieChart,
+  VisitorsChart,
+  TopProductsTable,
+  RecentOrdersTable,
+  ActivityTimeline,
+  QuickActions,
+} from "./dashboard";
+import RealtimeWidget from "./RealtimeWidget";
 
 interface DashboardViewProps {
-  locale: string;
+  locale: Locale;
 }
 
 export default function DashboardView({ locale }: DashboardViewProps) {
   const isFa = locale === "fa";
+  const adminName = useAdminStore((s) => s.adminName);
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return isFa ? "صبح بخیر" : "Good morning";
+    if (hour < 17) return isFa ? "روز بخیر" : "Good afternoon";
+    return isFa ? "شب بخیر" : "Good evening";
+  };
 
   return (
-    <div className="space-y-4">
-      {/* Header */}
+    <div className="space-y-4 md:space-y-5">
       <div>
-        <h1 className="text-[20px] md:text-[22px] font-bold text-[#3F4064] dark:text-[#E5E5EA] mb-1">
-          {isFa ? "داشبورد" : "Dashboard"}
+        <h1 className="text-[20px] md:text-[24px] font-bold text-[#3F4064] dark:text-[#E5E5EA] mb-1">
+          {getGreeting()}، {adminName ?? "Admin"} 👋
         </h1>
         <p className="text-[12px] text-[#62666D] dark:text-[#A1A3A8]">
           {isFa
@@ -24,21 +43,35 @@ export default function DashboardView({ locale }: DashboardViewProps) {
         </p>
       </div>
 
-      {/* Stats */}
-      <AdminStats locale={locale} />
+      <QuickActions locale={locale} />
+      <KpiCards locale={locale} />
 
-      {/* Chart + Top Products */}
+      <RealtimeWidget locale={locale} />
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2">
           <SalesChart locale={locale} />
         </div>
         <div className="lg:col-span-1">
-          <TopProducts locale={locale} />
+          <CategoryChart locale={locale} />
         </div>
       </div>
 
-      {/* Recent Orders */}
-      <RecentOrders locale={locale} />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="lg:col-span-2">
+          <VisitorsChart locale={locale} />
+        </div>
+        <div className="lg:col-span-1">
+          <SharePieChart locale={locale} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <TopProductsTable locale={locale} />
+        <RecentOrdersTable locale={locale} />
+      </div>
+
+      <ActivityTimeline locale={locale} />
     </div>
   );
 }

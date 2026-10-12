@@ -6,5 +6,5 @@ interface PageProps {
 
 export default async function AdminProductsPage({ params }: PageProps) {
   const { locale } = await params;
-  return <ProductsView locale={locale} />;
+  return <ProductsView locale={locale as "fa" | "en"} />;
 }

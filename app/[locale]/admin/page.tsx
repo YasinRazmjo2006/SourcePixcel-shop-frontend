@@ -6,5 +6,5 @@ interface PageProps {
 
 export default async function AdminDashboardPage({ params }: PageProps) {
   const { locale } = await params;
-  return <DashboardView locale={locale} />;
+  return <DashboardView locale={locale as "fa" | "en"} />;
 }
