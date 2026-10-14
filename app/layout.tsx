@@ -1,6 +1,5 @@
 import "./globals.css";
 import ThemeProvider from "@/components/common/ThemeProvider";
-import { vazirmatn, inter } from "@/lib/fonts";
 
 export const metadata = {
   title: "SourcePixcel — فروشگاه آنلاین مدرن",
@@ -20,9 +19,28 @@ export default function RootLayout({
       lang="fa"
       dir="rtl"
       suppressHydrationWarning
-      className={`${vazirmatn.variable} ${inter.variable}`}
     >
       <head>
+        {/* Preconnect for faster font loading */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+
+        {/* Vazirmatn (Persian) */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap"
+          rel="stylesheet"
+        />
+
+        {/* Inter (English) */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
+          rel="stylesheet"
+        />
+
         <script
           dangerouslySetInnerHTML={{
             __html: `

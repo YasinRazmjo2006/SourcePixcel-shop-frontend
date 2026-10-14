@@ -1,11 +1,9 @@
-import type { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import BottomNav from "@/components/layout/BottomNav";
 import ToastContainer from "@/components/common/ToastContainer";
 import KeyboardShortcuts from "@/components/common/KeyboardShortcuts";
 import OfflineBanner from "@/components/common/OfflineBanner";
-import FontLoader from "@/components/common/FontLoader";
 import SkipLink from "@/components/a11y/SkipLink";
 import ScreenReaderAnnouncer from "@/components/a11y/ScreenReaderAnnouncer";
 import JsonLd from "@/components/common/JsonLd";
@@ -28,7 +26,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: LayoutProps): Promise<Metadata> {
+}: LayoutProps) {
   const { locale } = await params;
   const typedLocale = locale as Locale;
 
@@ -58,17 +56,6 @@ export default async function LocaleLayout({
       className="font-sans"
       style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
     >
-      {/* Preconnect for performance */}
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossOrigin="anonymous"
-      />
-      <link rel="dns-prefetch" href="https://picsum.photos" />
-      <link rel="dns-prefetch" href="https://loremflickr.com" />
-
-      {/* Global JSON-LD */}
       <JsonLd
         data={[
           organizationSchema(),
@@ -79,7 +66,6 @@ export default async function LocaleLayout({
 
       <SkipLink locale={typedLocale} />
       <ScreenReaderAnnouncer />
-      <FontLoader />
       <Header locale={typedLocale} />
       <main
         id="main-content"

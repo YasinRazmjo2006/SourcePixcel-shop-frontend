@@ -12,7 +12,6 @@ export { default as ProductCardSkeleton } from "./ProductCardSkeleton";
 export { default as ErrorBoundary } from "./ErrorBoundary";
 export { default as KeyboardShortcuts } from "./KeyboardShortcuts";
 export { default as OfflineBanner } from "./OfflineBanner";
-export { default as FontLoader } from "./FontLoader";
 export { default as SmartImage } from "./SmartImage";
 export { default as LoadingScreen } from "./LoadingScreen";
 export { default as ProgressBar } from "./ProgressBar";

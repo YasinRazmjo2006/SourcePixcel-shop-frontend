@@ -129,12 +129,13 @@ select:focus-visible {
 }
 
 html,
+html,
 body {
   padding: 0;
   margin: 0;
   background: #F5F5F5;
   color: #3F4064;
-  font-family: var(--font-inter), var(--font-vazirmatn), system-ui, sans-serif;
+  font-family: "Vazirmatn", "Inter", system-ui, sans-serif;
   font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "tnum";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -144,19 +145,17 @@ body {
 
 [dir="rtl"],
 [dir="rtl"] body {
-  font-family: var(--font-vazirmatn), system-ui, Tahoma, Arial, sans-serif;
-  line-height: var(--leading-persian);
+  font-family: "Vazirmatn", system-ui, Tahoma, Arial, sans-serif;
+  line-height: 1.75;
   letter-spacing: 0;
-  word-spacing: 0.05em;
 }
 
 [dir="ltr"],
 [dir="ltr"] body {
-  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
-  line-height: var(--leading-normal);
-  letter-spacing: var(--tracking-tight);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
 }
-
 html.dark,
 html.dark body {
   background: #0F0F12;

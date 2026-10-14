@@ -18,31 +18,16 @@ const config: Config = {
         bg: "#F5F5F5",
       },
       fontFamily: {
-        // English font (LTR)
         sans: [
-          "var(--font-inter)",
-          "var(--font-vazirmatn)",
+          "Vazirmatn",
+          "Inter",
           "system-ui",
           "-apple-system",
           "Segoe UI",
           "sans-serif",
         ],
-        // Persian font (RTL) — used via [dir="rtl"]
-        fa: [
-          "var(--font-vazirmatn)",
-          "system-ui",
-          "Tahoma",
-          "Arial",
-          "sans-serif",
-        ],
-        en: [
-          "var(--font-inter)",
-          "system-ui",
-          "-apple-system",
-          "Segoe UI",
-          "sans-serif",
-        ],
-        // Numbers/mono
+        fa: ["Vazirmatn", "system-ui", "Tahoma", "Arial", "sans-serif"],
+        en: ["Inter", "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
         mono: [
           "ui-monospace",
           "SFMono-Regular",
