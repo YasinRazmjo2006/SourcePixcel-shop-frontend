@@ -12,7 +12,7 @@ export interface PdfOptions<T> {
   locale?: "fa" | "en";
 }
 
-export function exportToPDF<T extends Record<string, unknown>>({
+export function exportToPDF<T>({
   title,
   subtitle,
   data,
@@ -28,8 +28,7 @@ export function exportToPDF<T extends Record<string, unknown>>({
 
   const pageWidth = doc.internal.pageSize.getWidth();
 
-  // Header
-  doc.setFillColor(239, 64, 86); // #EF4056
+  doc.setFillColor(239, 64, 86);
   doc.rect(0, 0, pageWidth, 25, "F");
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(18);
@@ -42,7 +41,6 @@ export function exportToPDF<T extends Record<string, unknown>>({
     doc.text(subtitle, pageWidth / 2, 19, { align: "center" });
   }
 
-  // Date
   doc.setTextColor(160, 163, 168);
   doc.setFontSize(9);
   const dateStr =
@@ -51,12 +49,12 @@ export function exportToPDF<T extends Record<string, unknown>>({
       : new Date().toLocaleDateString("en-US");
   doc.text(`Generated: ${dateStr}`, pageWidth - 10, 32, { align: "right" });
 
-  // Table
   const head = [columns.map((c) => c.label)];
   const body = data.map((row) =>
     columns.map((col) => {
-      if (col.formatter) return col.formatter(row[col.key as keyof T], row);
-      return String(row[col.key as keyof T] ?? "");
+      if (col.formatter)
+        return col.formatter((row as Record<string, unknown>)[col.key], row);
+      return String((row as Record<string, unknown>)[col.key] ?? "");
     })
   );
 
@@ -78,8 +76,7 @@ export function exportToPDF<T extends Record<string, unknown>>({
       fillColor: [250, 250, 250],
     },
     margin: { top: 38, left: 10, right: 10 },
-    didDrawPage: (data) => {
-      // Footer
+    didDrawPage: () => {
       const pageCount = doc.getNumberOfPages();
       const pageNum = doc.getCurrentPageInfo().pageNumber;
       doc.setFontSize(8);

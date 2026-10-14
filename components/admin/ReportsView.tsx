@@ -60,7 +60,7 @@ export default function ReportsView({ locale }: ReportsViewProps) {
     return orders.slice(0, 100);
   }, [activeType, orders, products]);
 
-  const columns: CsvColumn<Record<string, unknown>>[] = useMemo(() => {
+   const columns: CsvColumn<any>[] = useMemo(() => {
     if (activeType === "orders") {
       return [
         { key: "id", label: isFa ? "شماره سفارش" : "Order ID" },

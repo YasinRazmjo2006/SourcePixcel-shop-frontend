@@ -6,5 +6,5 @@ interface PageProps {
 
 export default async function AdminOrdersPage({ params }: PageProps) {
   const { locale } = await params;
-  return <OrdersView locale={locale} />;
+  return <OrdersView locale={locale as "fa" | "en"} />;
 }
