@@ -40,9 +40,9 @@ export default function ProductDetail({ product, locale }: ProductDetailProps) {
 
   const images = [
     product.image,
-    `/images/products/product-${product.id}.svg`,
-    `/images/products/product-${product.id}.svg`,
-    `/images/products/product-${product.id}.svg`,
+    withBasePath(`/images/products/product-${product.id}.svg`),
+    withBasePath(`/images/products/product-${product.id}.svg`),
+    withBasePath(`/images/products/product-${product.id}.svg`),
   ];
 
   const handleAddToCart = () => {
@@ -224,3 +224,4 @@ export default function ProductDetail({ product, locale }: ProductDetailProps) {
     </div>
   );
 }
+import { withBasePath } from "@/lib/utils/paths";

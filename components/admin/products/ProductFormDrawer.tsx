@@ -38,7 +38,7 @@ const EMPTY: FormState = {
   stock: "0",
   category: "mobile",
   brand: "samsung",
-  image: "/images/products/product-1.svg",
+  image: withBasePath("/images/products/product-1.svg"),
   inStock: true,
 };
 
@@ -360,3 +360,4 @@ export default function ProductFormDrawer({
     </AnimatePresence>
   );
 }
+import { withBasePath } from "@/lib/utils/paths";
