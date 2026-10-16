@@ -15,6 +15,7 @@ import {
 import type { Locale, Product } from "@/lib/types";
 import { useCartStore, useWishlistStore } from "@/lib/stores";
 import { getBrandById } from "@/lib/data";
+import { getProductImage } from "@/lib/data/product-images";
 import { TrustBadges } from "@/components/trust";
 import RatingStars from "./RatingStars";
 import PriceTag from "./PriceTag";
@@ -40,9 +41,9 @@ export default function ProductDetail({ product, locale }: ProductDetailProps) {
 
   const images = [
     product.image,
-    withBasePath(`/images/products/product-${product.id}.svg`),
-    withBasePath(`/images/products/product-${product.id}.svg`),
-    withBasePath(`/images/products/product-${product.id}.svg`),
+    getProductImage(product.id + 1),
+    getProductImage(product.id + 2),
+    getProductImage(product.id + 3),
   ];
 
   const handleAddToCart = () => {
@@ -224,4 +225,3 @@ export default function ProductDetail({ product, locale }: ProductDetailProps) {
     </div>
   );
 }
-import { withBasePath } from "@/lib/utils/paths";

@@ -1,0 +1,74 @@
+[
+    {
+        "id":  78,
+        "title":  "Apple MacBook Pro 14 Inch Space Grey",
+        "thumbnail":  "https://cdn.dummyjson.com/product-images/laptops/apple-macbook-pro-14-inch-space-grey/thumbnail.webp",
+        "category":  "laptops"
+    },
+    {
+        "id":  79,
+        "title":  "Asus Zenbook Pro Dual Screen Laptop",
+        "thumbnail":  "https://cdn.dummyjson.com/product-images/laptops/asus-zenbook-pro-dual-screen-laptop/thumbnail.webp",
+        "category":  "laptops"
+    },
+    {
+        "id":  80,
+        "title":  "Huawei Matebook X Pro",
+        "thumbnail":  "https://cdn.dummyjson.com/product-images/laptops/huawei-matebook-x-pro/thumbnail.webp",
+        "category":  "laptops"
+    },
+    {
+        "id":  81,
+        "title":  "Lenovo Yoga 920",
+        "thumbnail":  "https://cdn.dummyjson.com/product-images/laptops/lenovo-yoga-920/thumbnail.webp",
+        "category":  "laptops"
+    },
+    {
+        "id":  93,
+        "title":  "Brown Leather Belt Watch",
+        "thumbnail":  "https://cdn.dummyjson.com/product-images/mens-watches/brown-leather-belt-watch/thumbnail.webp",
+        "category":  "mens-watches"
+    },
+    {
+        "id":  94,
+        "title":  "Longines Master Collection",
+        "thumbnail":  "https://cdn.dummyjson.com/product-images/mens-watches/longines-master-collection/thumbnail.webp",
+        "category":  "mens-watches"
+    },
+    {
+        "id":  95,
+        "title":  "Rolex Cellini Date Black Dial",
+        "thumbnail":  "https://cdn.dummyjson.com/product-images/mens-watches/rolex-cellini-date-black-dial/thumbnail.webp",
+        "category":  "mens-watches"
+    },
+    {
+        "id":  96,
+        "title":  "Rolex Cellini Moonphase",
+        "thumbnail":  "https://cdn.dummyjson.com/product-images/mens-watches/rolex-cellini-moonphase/thumbnail.webp",
+        "category":  "mens-watches"
+    },
+    {
+        "id":  121,
+        "title":  "iPhone 5s",
+        "thumbnail":  "https://cdn.dummyjson.com/product-images/smartphones/iphone-5s/thumbnail.webp",
+        "category":  "smartphones"
+    },
+    {
+        "id":  122,
+        "title":  "iPhone 6",
+        "thumbnail":  "https://cdn.dummyjson.com/product-images/smartphones/iphone-6/thumbnail.webp",
+        "category":  "smartphones"
+    },
+    {
+        "id":  123,
+        "title":  "iPhone 13 Pro",
+        "thumbnail":  "https://cdn.dummyjson.com/product-images/smartphones/iphone-13-pro/thumbnail.webp",
+        "category":  "smartphones"
+    },
+    {
+        "id":  124,
+        "title":  "iPhone X",
+        "thumbnail":  "https://cdn.dummyjson.com/product-images/smartphones/iphone-x/thumbnail.webp",
+        "category":  "smartphones"
+    }
+]

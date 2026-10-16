@@ -3,6 +3,7 @@
 import Image, { type ImageProps } from "next/image";
 import { useState } from "react";
 import { getCategoryColor } from "@/lib/utils";
+import { withBasePath } from "@/lib/utils/paths";
 
 interface SmartImageProps extends Omit<ImageProps, "onLoad" | "onError"> {
   /** Optional category to pick color for placeholder */
@@ -55,13 +56,14 @@ export default function SmartImage({
       {/* Image */}
       <Image
         {...props}
+        src={hasError ? withBasePath("/images/products/product-1.svg") : props.src}
         alt={alt}
         placeholder="blur"
         blurDataURL={blurDataURL}
         onLoad={() => setIsLoaded(true)}
         onError={() => setHasError(true)}
         className={`${className ?? ""} transition-opacity duration-500 ${
-          isLoaded ? "opacity-100" : "opacity-0"
+          isLoaded || hasError ? "opacity-100" : "opacity-0"
         }`}
       />
     </div>
