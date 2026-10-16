@@ -1,4 +1,6 @@
 // lib/data/product-images.ts
-export function getProductImage(id: number, width = 600, height = 600): string {
-  return `https://picsum.photos/seed/sourcepixcel-${id}/${width}/${height}`;
+import { withBasePath } from "@/lib/utils/paths";
+
+export function getProductImage(id: number, _width = 600, _height = 600): string {
+  return withBasePath(`/images/products/product-${id}.svg`);
 }
