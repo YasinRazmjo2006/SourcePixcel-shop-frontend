@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 const nextConfig = {
+  // GitHub Pages serves this project from a repository subpath.
+  basePath,
+  assetPrefix: basePath || undefined,
   // Output
   reactStrictMode: true,
   poweredByHeader: false,
